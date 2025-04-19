@@ -8,6 +8,7 @@ public class PlayerMovement_Network : NetworkBehaviour {
     [SerializeField] private Rigidbody2D m_rb;
     [SerializeField] private float m_speed = 5f;
     [SerializeField] private Transform m_player;
+    [SerializeField] private Camera m_cam;
 
     private Vector2 m_moveUpdate;
 
@@ -29,7 +30,7 @@ public class PlayerMovement_Network : NetworkBehaviour {
     private void LookAtMouse()
     {
         Vector3 mouseScreenPos = Input.mousePosition;
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        Vector3 mouseWorldPos = m_cam.ScreenToWorldPoint(mouseScreenPos);
 
         Vector2 direction = mouseWorldPos - m_player.position;
 
