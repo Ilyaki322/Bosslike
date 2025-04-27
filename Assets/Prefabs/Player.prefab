@@ -380,6 +380,7 @@ GameObject:
   - component: {fileID: 5308295202215726072}
   - component: {fileID: 5654232716406026591}
   - component: {fileID: -7659173095810208794}
+  - component: {fileID: -8040300605526187928}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -446,6 +447,7 @@ MonoBehaviour:
   m_speed: 5
   m_player: {fileID: 4441202403104225142}
   m_cam: {fileID: 8993046564015547609}
+  m_input: {fileID: -8040300605526187928}
 --- !u!114 &4484604091268177873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -580,7 +582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_movement: {fileID: 2735445441948731676}
-  m_input: {fileID: 4484604091268177873}
+  m_input: {fileID: 0}
   m_camera: {fileID: 8993046564015547609}
 --- !u!58 &-7659173095810208794
 CircleCollider2D:
@@ -618,3 +620,16 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &-8040300605526187928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8877230402697404518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76ba7ef7b8eda3448ada355a6e848b9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveUpdate: {x: 0, y: 0}
