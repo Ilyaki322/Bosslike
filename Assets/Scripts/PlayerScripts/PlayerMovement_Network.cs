@@ -8,7 +8,7 @@ public class PlayerMovement_Network : NetworkBehaviour {
     [SerializeField, Header("References")] private Rigidbody2D m_rb;
     [SerializeField] private Transform m_player;
     [SerializeField] private Camera m_cam;
-    [SerializeField] private PlayerInput m_input;
+    [SerializeField] private PlayerInputManager m_input;
 
     [Space]
     [SerializeField, Header("Properties")] private float m_speed = 5f;

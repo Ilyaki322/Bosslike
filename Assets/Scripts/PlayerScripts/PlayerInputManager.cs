@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
  * This class will contain all fields / functions related to user input
  * Classes that use user input will get the fields through this
  */
-public class PlayerInput : MonoBehaviour
+public class PlayerInputManager : MonoBehaviour
 {
     [HideInInspector] public Vector2 moveUpdate;
 
