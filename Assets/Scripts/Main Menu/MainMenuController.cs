@@ -1,16 +1,32 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
+using Unity.Netcode;
 
 public class MainMenuController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("UI Buttons")]
+    [SerializeField] private Button singlePlayerButton;
+    [SerializeField] private Button multiPlayerButton;
+
+    [SerializeField] private string characterSelectionSceneName = "CharacterSelection";
+
+    private void Awake()
     {
-        
+        singlePlayerButton.onClick.AddListener(OnHostClicked);
+        multiPlayerButton.onClick.AddListener(OnClientClicked);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnHostClicked()
     {
-        
+        NetworkManager.Singleton.StartHost();
+        NetworkManager.Singleton.SceneManager.LoadScene(
+            characterSelectionSceneName,
+            UnityEngine.SceneManagement.LoadSceneMode.Single
+        );
+    }
+
+    private void OnClientClicked()
+    {
+        NetworkManager.Singleton.StartClient();
     }
 }
