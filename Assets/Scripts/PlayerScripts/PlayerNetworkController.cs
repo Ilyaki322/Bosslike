@@ -12,12 +12,19 @@ public class PlayerNetworkController : NetworkBehaviour
     [SerializeField] private PlayerMovement_Network m_movement;
     [SerializeField] private PlayerInput m_input;
     [SerializeField] private Camera m_camera;
+    [SerializeField] private PlayerCombat m_combat;
+    [SerializeField] private PlayerInputManager m_pim;
+    [SerializeField] private FireTestProjectile m_test;
+    [SerializeField] private Rigidbody2D m_rb;
 
     private void Awake()
     {
         m_input.enabled = false;
         m_movement.enabled = false;
         m_camera.enabled = false;
+        m_combat.enabled = false;
+        m_pim.enabled = false;
+        m_test.enabled = false;
     }
     public override void OnNetworkSpawn()
     {
@@ -28,6 +35,9 @@ public class PlayerNetworkController : NetworkBehaviour
             m_input.enabled = true;
             m_movement.enabled = true;
             m_camera.enabled = true;
+            m_combat.enabled = true;
+            m_pim.enabled = true;
+            m_test.enabled = true;
 
             m_camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }

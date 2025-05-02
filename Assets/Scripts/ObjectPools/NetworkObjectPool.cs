@@ -23,6 +23,7 @@ public class NetworkObjectPool : MonoBehaviour
 
     private void Awake()
     {
+        gameObject.tag = "NetworkObjectPool";
         InitPool();
     }
     
