@@ -1,7 +1,7 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Ability : NetworkBehaviour
+//[CreateAssetMenu(fileName = "Ability", menuName = "Ability/Base")]
+public abstract class AbilitySO : ScriptableObject
 {
     protected PlayerCombat m_playerCombat;
 

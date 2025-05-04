@@ -1,19 +1,21 @@
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using UnityEngine;
 
-public class FireTestProjectile : Ability
+[CreateAssetMenu(fileName = "TestProjectileAbility", menuName = "Ability/TestProjectileAbility")]
+public class TestProjectileSO : AbilitySO
 {
     [SerializeField] GameObject m_projectile;
 
     public override void Use()
     {
-        if (!IsServer) return;
+        if (!NetworkManager.Singleton.IsServer) return;
 
+        Vector3 spawnPosition = m_playerCombat.transform.position;
         Vector2 target = m_playerCombat.m_mousePosition;
         var go = m_playerCombat.m_objectPool.GetNetworkObject(m_projectile).gameObject;
 
-        go.transform.position = transform.position + transform.forward;
-        Vector2 direction = (target - (Vector2)transform.position).normalized;
+        go.transform.position = spawnPosition;
+        Vector2 direction = (target - (Vector2)spawnPosition).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
         go.transform.rotation = Quaternion.Euler(0, 0, angle);
 

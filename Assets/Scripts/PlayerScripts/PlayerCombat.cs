@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerCombat : NetworkBehaviour
 {
     [SerializeField, HideInInspector] public NetworkObjectPool m_objectPool;
-    [SerializeField] List<Ability> m_abilities;
+    [SerializeField] List<AbilitySO> m_abilities;
 
     [HideInInspector] public Vector2 m_mousePosition;
 
