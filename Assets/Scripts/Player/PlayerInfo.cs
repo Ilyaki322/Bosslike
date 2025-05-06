@@ -1,19 +1,14 @@
 ﻿using Unity.Collections;
 using Unity.Netcode;
-using UnityEngine;
 
 public class PlayerInfo : NetworkBehaviour
 {
-    // Server‐owned write, everyone can read
-    private NetworkVariable<FixedString32Bytes> playerName =
+    public NetworkVariable<FixedString32Bytes> NameVar =
         new NetworkVariable<FixedString32Bytes>(
             default,
             NetworkVariableReadPermission.Everyone,
-            NetworkVariableWritePermission.Owner
+            NetworkVariableWritePermission.Server
         );
-
-    public NetworkVariable<FixedString32Bytes> NameVar => playerName;
-
 
     private void Awake()
     {
@@ -23,9 +18,12 @@ public class PlayerInfo : NetworkBehaviour
     public void SetPlayerName(string newName)
     {
         if (!IsOwner) return;
-        playerName.Value = newName;
+        SubmitNameServerRpc(newName);
     }
 
-    
-
+    [ServerRpc]
+    private void SubmitNameServerRpc(string newName, ServerRpcParams rpcParams = default)
+    {
+        NameVar.Value = newName;
+    }
 }

@@ -8,7 +8,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Button singlePlayerButton;
     [SerializeField] private Button multiPlayerButton;
 
-    [SerializeField] private string characterSelectionSceneName = "CharacterSelection";
+    [SerializeField] private string characterSelectionSceneName = "CharacterSelect";
 
     private void Awake()
     {

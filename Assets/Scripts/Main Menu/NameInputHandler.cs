@@ -12,88 +12,43 @@ public class NameInputHandler : MonoBehaviour
     [SerializeField] private TMP_Text greetingText;
     [SerializeField] private GameObject mainMenuContainerUI;
 
-    private PlayerInfo localPlayerInfo;
     private string pendingName;
 
     private void Awake()
     {
-        // Wire up UI buttons immediately
+        DontDestroyOnLoad(gameObject);
+
+        // Wire up buttons
         saveNameButton.onClick.AddListener(OnSaveNameClicked);
         changeNameButton.onClick.AddListener(ShowInputUI);
-    }
 
-    private void Start()
-    {
-        // Subscribe to the Netcode callback *after* the singleton is ready
-        if (NetworkManager.Singleton != null)
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-
-        // Try to cache PlayerInfo if it already exists
-        TryAssignLocalPlayerInfo();
-
-        // If they've already set a name, show the greeting
-        if (IsNameAlreadySet())
-        {
-            var existing = localPlayerInfo.NameVar.Value.ToString();
-            pendingName = existing;
-            ShowGreetingUI(existing);
-        }
-        else
-        {
-            ShowInputUI();
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (NetworkManager.Singleton != null)
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-    }
-
-    private void OnClientConnected(ulong clientId)
-    {
-        // Only care about our own local client
-        if (clientId != NetworkManager.Singleton.LocalClientId) return;
-
-        TryAssignLocalPlayerInfo();
-
-        // If the player already clicked Save before PlayerObject existed, apply now
-        if (!string.IsNullOrEmpty(pendingName) && localPlayerInfo != null)
-            localPlayerInfo.SetPlayerName(pendingName);
+        // Initially, only show the input/save
+        ShowInputUI();
     }
 
     private void OnSaveNameClicked()
     {
-        var entered = nameInputField.text.Trim();
-        if (string.IsNullOrWhiteSpace(entered))
-            return;
+        // 1) Capture & validate
+        var n = nameInputField.text.Trim();
+        if (string.IsNullOrEmpty(n)) n = "Guest";
+        pendingName = n;
 
-        pendingName = entered;
+        // 2) Swap UI to greeting
+        greetingText.text = $"Welcome, {n}!";
+        greetingText.gameObject.SetActive(true);
+        changeNameButton.gameObject.SetActive(true);
 
-        // If PlayerInfo is ready, set immediately
-        TryAssignLocalPlayerInfo();
-        if (localPlayerInfo != null)
-            localPlayerInfo.SetPlayerName(pendingName);
+        nameInputField.gameObject.SetActive(false);
+        saveNameButton.gameObject.SetActive(false);
+        mainMenuContainerUI.SetActive(true);
 
-        ShowGreetingUI(entered);
-    }
-
-    private void TryAssignLocalPlayerInfo()
-    {
-        if (localPlayerInfo != null) return;
-        var clientObj = NetworkManager.Singleton?.LocalClient?.PlayerObject;
-        if (clientObj != null)
-            localPlayerInfo = clientObj.GetComponent<PlayerInfo>();
-    }
-
-    private bool IsNameAlreadySet()
-    {
-        return localPlayerInfo != null
-            && !string.IsNullOrEmpty(localPlayerInfo.NameVar.Value.ToString());
+        // 3) Wait for our local PlayerObject to spawn
+        NetworkManager.Singleton.OnClientConnectedCallback += TransferNameToPlayerInfo;
     }
 
     private void ShowInputUI()
     {
+        // Show only the input + save, hide the rest
         nameInputField.gameObject.SetActive(true);
         saveNameButton.gameObject.SetActive(true);
 
@@ -102,14 +57,22 @@ public class NameInputHandler : MonoBehaviour
         mainMenuContainerUI.SetActive(false);
     }
 
-    private void ShowGreetingUI(string name)
+    private void TransferNameToPlayerInfo(ulong clientId)
     {
-        greetingText.text = $"Welcome, {name}!";
-        greetingText.gameObject.SetActive(true);
-        changeNameButton.gameObject.SetActive(true);
-        mainMenuContainerUI.SetActive(true);
+        // Only run for _this_ client
+        if (clientId != NetworkManager.Singleton.LocalClientId) return;
 
-        nameInputField.gameObject.SetActive(false);
-        saveNameButton.gameObject.SetActive(false);
+        // Grab our PlayerObject and set the network variable
+        var po = NetworkManager.Singleton
+                      .SpawnManager
+                      .GetLocalPlayerObject();
+        if (po != null && po.TryGetComponent<PlayerInfo>(out var pi))
+        {
+            pi.SetPlayerName(pendingName);
+        }
+        Debug.Log($"Name set to {pendingName} for client {clientId}");
+        // Clean up
+        NetworkManager.Singleton.OnClientConnectedCallback -= TransferNameToPlayerInfo;
+        Destroy(gameObject);
     }
 }
