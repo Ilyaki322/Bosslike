@@ -900,14 +900,22 @@ PrefabInstance:
       objectReference: {fileID: 2037125830}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[0].prefab
       value: 
       objectReference: {fileID: 7983661663601266262, guid: 5f4d300701e3f624d9e021f8edeb42fe, type: 3}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
+      propertyPath: m_pooledPrefabList.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
+    - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[0].prewarmCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
+      propertyPath: m_pooledPrefabList.Array.data[1].prewarmCount
       value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2078,6 +2086,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_maxHP: 100
   m_hpbar: {fileID: 2020649690}
+  m_dmgPopup: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
 --- !u!58 &1840755506
 CircleCollider2D:
   m_ObjectHideFlags: 0

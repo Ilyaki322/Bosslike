@@ -10,10 +10,13 @@ public class TestProjectile : NetworkBehaviour
     [SerializeField] Rigidbody2D m_rb;
 
     PlayerCombat m_owner;
+    ulong m_ownerId;
 
-    public void Config(PlayerCombat owner, float lifetime)
+    public void Config(PlayerCombat owner, float lifetime, ulong user)
     {
         m_owner = owner;
+        m_ownerId = user;
+
         if (IsServer)
         {
             StartCoroutine(ProjectileDestroyCoroutine(lifetime));
@@ -73,7 +76,7 @@ public class TestProjectile : NetworkBehaviour
 
         if (other.TryGetComponent<Healthbar_Network>(out var enemy))
         {
-            enemy.TakeDamage(m_damage);
+            enemy.TakeDamage(m_damage, m_ownerId);
             DestroyProjectile();
             return;
         }

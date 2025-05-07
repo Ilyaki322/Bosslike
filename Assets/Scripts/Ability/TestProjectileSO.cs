@@ -6,13 +6,13 @@ public class TestProjectileSO : AbilitySO
 {
     [SerializeField] GameObject m_projectile;
 
-    public override void Use()
+    public override void Use(PlayerCombat pc, ulong user)
     {
         if (!NetworkManager.Singleton.IsServer) return;
 
-        Vector3 spawnPosition = m_playerCombat.transform.position;
-        Vector2 target = m_playerCombat.m_mousePosition;
-        var go = m_playerCombat.m_objectPool.GetNetworkObject(m_projectile).gameObject;
+        Vector3 spawnPosition = pc.transform.position;
+        Vector2 target = pc.m_mousePosition;
+        var go = pc.m_objectPool.GetNetworkObject(m_projectile).gameObject;
 
         go.transform.position = spawnPosition;
         Vector2 direction = (target - (Vector2)spawnPosition).normalized;
@@ -24,7 +24,7 @@ public class TestProjectileSO : AbilitySO
 
         go.GetComponent<NetworkObject>().Spawn(true);
         var tp = go.GetComponent<TestProjectile>();
-        tp.Config(m_playerCombat, 3f);
+        tp.Config(pc, 3f, user);
         tp.SetVelocity(velocity);
     }
 }

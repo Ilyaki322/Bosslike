@@ -1,11 +1,16 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class PlayerCombat : NetworkBehaviour
 {
     [SerializeField, HideInInspector] public NetworkObjectPool m_objectPool;
+
+    [SerializeField] Animator m_animator;
+    [SerializeField] NetworkAnimator m_networkAnimator;
     [SerializeField] List<AbilitySO> m_abilities;
 
     [HideInInspector] public Vector2 m_mousePosition;
@@ -13,11 +18,12 @@ public class PlayerCombat : NetworkBehaviour
     public void Awake()
     {
         m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
+    }
 
-        foreach (var ab in m_abilities)
-        {
-            ab.Init(this);
-        }
+    public void TriggerAnimation(string animTrigger)
+    {
+        //m_animator.SetTrigger(animTrigger);
+        m_networkAnimator.SetTrigger(animTrigger);
     }
 
     public void UseAbility(int i, Vector3 mousePos)
@@ -30,16 +36,16 @@ public class PlayerCombat : NetworkBehaviour
             return;
         }
 
-        UseAbilityServerRpc(new Vector2(mousePos.x, mousePos.y), i);
+        UseAbilityServerRpc(new Vector2(mousePos.x, mousePos.y), i, NetworkManager.Singleton.LocalClientId);
         //m_abilities[i].Use();
     }
 
     [Rpc(SendTo.Server)]
-    private void UseAbilityServerRpc(Vector2 mousePos, int i)
+    private void UseAbilityServerRpc(Vector2 mousePos, int i, ulong user)
     {
         m_mousePosition = mousePos;
-        m_abilities[i].Use();
+        m_abilities[i].Use(this, user);
     }
-    
-    // Manager Ability Cooldown
+
+    // Manage Ability Cooldown
 }
