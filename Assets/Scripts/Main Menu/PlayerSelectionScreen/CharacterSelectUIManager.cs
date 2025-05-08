@@ -1,71 +1,80 @@
 ﻿using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
+using Unity.Netcode;
+using UnityEngine.UI;
 
+/// <summary>
+/// Listens to player join/leave events and maintains the UI list.
+/// </summary>
 public class CharacterSelectUIManager : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] RectTransform listContainer;
-    [SerializeField] GameObject listItemPrefab;
+    [SerializeField] private RectTransform listContainer;
+    [SerializeField] private GameObject listItemPrefab;
+    [SerializeField] private Button m_disconnectButton;
 
-    // track one entry per clientId
-    private readonly Dictionary<ulong, PlayerListEntry> _entries
-        = new Dictionary<ulong, PlayerListEntry>();
+    private readonly Dictionary<ulong, PlayerListEntry> _entries = new();
 
-    private NetworkManager nm;
-
-    private void Start()
+    private void Awake()
     {
-        nm = NetworkManager.Singleton;
+        if (listContainer == null || listItemPrefab == null || m_disconnectButton == null)
+            Debug.LogError("CharacterSelectUIManager: Assign listContainer and listItemPrefab in the Inspector.");
 
-        // 1) Add a row for every connection we know about (host + all clients)
-        foreach (var clientId in nm.ConnectedClients.Keys)
-            TryAddEntry(clientId);
-
-        // 2) Listen for new joins & leaves
-        nm.OnClientConnectedCallback += TryAddEntry;
-        nm.OnClientDisconnectCallback += RemoveEntry;
+        m_disconnectButton.onClick.AddListener(OnDisconnectButtonClicked);
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        nm.OnClientConnectedCallback -= TryAddEntry;
-        nm.OnClientDisconnectCallback -= RemoveEntry;
+        PlayerNetworkInfo.OnPlayerJoined += HandlePlayerJoined;
+        PlayerNetworkInfo.OnPlayerLeft += HandlePlayerLeft;
+
+        foreach (var netObj in NetworkManager.Singleton.SpawnManager.SpawnedObjects.Values)
+        {
+            var info = netObj.GetComponent<PlayerNetworkInfo>();
+            if (info != null)
+                HandlePlayerJoined(info);
+        }
     }
 
-    private void TryAddEntry(ulong clientId)
+    private void OnDisable()
     {
-        if (_entries.ContainsKey(clientId)) return;
+        PlayerNetworkInfo.OnPlayerJoined -= HandlePlayerJoined;
+        PlayerNetworkInfo.OnPlayerLeft -= HandlePlayerLeft;
+    }
 
-        if (!nm.ConnectedClients.TryGetValue(clientId, out var cd)) return;
-        var po = cd.PlayerObject;
-        if (po == null) return;
+    private void HandlePlayerJoined(PlayerNetworkInfo info)
+    {
+        var clientId = info.OwnerClientId;
+        if (_entries.ContainsKey(clientId))
+            return;
 
-        var pi = po.GetComponent<PlayerInfo>();
-        if (pi == null) return;
-
-        // instantiate UI
         var go = Instantiate(listItemPrefab, listContainer);
         var entry = go.GetComponent<PlayerListEntry>();
+        if (entry == null)
+        {
+            Debug.LogError("CharacterSelectUIManager: listItemPrefab missing PlayerListEntry script.");
+            return;
+        }
+
         _entries[clientId] = entry;
-
-        // mark host vs client
         bool isHost = clientId == NetworkManager.ServerClientId;
-        // read whatever name has arrived so far
-        var raw = pi.NameVar.Value.ToString();
-        entry.Setup(string.IsNullOrEmpty(raw) ? "Guest" : raw, isHost);
+        entry.Setup(info.NameVar.Value.ToString(), isHost);
 
-        // subscribe to updates
-        pi.NameVar.OnValueChanged += (_, newName) =>
+        info.NameVar.OnValueChanged += (oldName, newName) =>
             entry.UpdateName(newName.ToString());
     }
 
-    private void RemoveEntry(ulong clientId)
+    private void HandlePlayerLeft(ulong clientId)
     {
         if (_entries.TryGetValue(clientId, out var entry))
         {
             Destroy(entry.gameObject);
             _entries.Remove(clientId);
         }
+    }
+
+    public void OnDisconnectButtonClicked()
+    {
+        NetworkManager.Singleton.Shutdown();
     }
 }
