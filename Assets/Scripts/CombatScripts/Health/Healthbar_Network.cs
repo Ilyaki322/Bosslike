@@ -56,7 +56,7 @@ public class Healthbar_Network : NetworkBehaviour
 
         var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
         popup.GetComponent<NetworkObject>().Spawn(true);
-        popup.GetComponent<DamagePopup>().Config(0.5f, transform.position, damage, attackerID);
+        popup.GetComponent<DamagePopup>().Config(0.75f, transform.position, damage, attackerID);
     }
 
     private void OnHealthChanged(float oldValue, float newValue)

@@ -217,3 +217,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_text: {fileID: 4685194912569529995}
+  m_textColor: {r: 0.9921569, g: 0.854902, b: 0, a: 1}
