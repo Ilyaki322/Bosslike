@@ -38,6 +38,7 @@ public class CharacterSelectUIManager : MonoBehaviour
 
     private void OnDisable()
     {
+        ClearList();
         PlayerNetworkInfo.OnPlayerJoined -= HandlePlayerJoined;
         PlayerNetworkInfo.OnPlayerLeft -= HandlePlayerLeft;
     }
@@ -74,7 +75,14 @@ public class CharacterSelectUIManager : MonoBehaviour
     }
 
     public void OnDisconnectButtonClicked()
-    {
+    {   
         NetworkManager.Singleton.Shutdown();
+    }
+
+    private void ClearList()
+    {
+        foreach (Transform child in listContainer)
+            Destroy(child.gameObject);
+        _entries.Clear();
     }
 }
