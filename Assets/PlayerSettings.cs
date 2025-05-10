@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerSettings : MonoBehaviour
+public static class PlayerSettings
 {
-    public string m_PlayerName {get; set; }
+    public static string LocalPlayerName = "Guest";
 }

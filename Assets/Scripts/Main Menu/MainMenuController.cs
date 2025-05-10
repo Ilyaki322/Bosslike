@@ -8,6 +8,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Button singlePlayerButton;
     [SerializeField] private Button multiPlayerButton;
 
+    [Header("UI Panels")]
+    [SerializeField] private GameObject lobbyPanel;
+
     private void Awake()
     {
         if (singlePlayerButton == null || multiPlayerButton == null)
@@ -20,31 +23,29 @@ public class MainMenuController : MonoBehaviour
     {
         singlePlayerButton.onClick.AddListener(StartHost);
         multiPlayerButton.onClick.AddListener(StartClient);
-        PlayerNetworkInfo.OnPlayerJoined += HandleLocalPlayerJoined;
     }
 
     private void OnDisable()
     {
         singlePlayerButton.onClick.RemoveListener(StartHost);
         multiPlayerButton.onClick.RemoveListener(StartClient);
-        PlayerNetworkInfo.OnPlayerJoined -= HandleLocalPlayerJoined;
     }
 
     private void StartHost()
     {
+        SwitchToLobby();
         NetworkManager.Singleton.StartHost();
     }
 
     private void StartClient()
     {
+        SwitchToLobby();
         NetworkManager.Singleton.StartClient();
     }
 
-    private void HandleLocalPlayerJoined(PlayerNetworkInfo info)
+    private void SwitchToLobby()
     {
-        if (!info.IsOwner) return;
-        var settings = GetComponent<PlayerSettings>();
-        if (settings != null)
-            info.InitPlayerInfo(settings);
+        gameObject.SetActive(false);
+        lobbyPanel.SetActive(true);
     }
 }

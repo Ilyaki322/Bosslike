@@ -22,6 +22,6 @@ MonoBehaviour:
     Icon: {fileID: 7482667652216324306, guid: b456495dd18b1f6419033e7ecaca6844, type: 3}
     Prefab: {fileID: 3160118534778775924, guid: 10fa5e5cd57ed604fa940f91aaaac79d, type: 3}
   - Id: 2
-    Name: Hataim
+    Name: Gary
     Icon: {fileID: 3625043607559282579, guid: 3876af24dc5c4c74bafcefb6a58b94ab, type: 3}
     Prefab: {fileID: 3160118534778775924, guid: 10fa5e5cd57ed604fa940f91aaaac79d, type: 3}

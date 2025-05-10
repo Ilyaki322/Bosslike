@@ -25,7 +25,7 @@ public class NameInputHandler : MonoBehaviour
         // 1) Capture & validate
         var name = nameInputField.text.Trim();
         if (string.IsNullOrEmpty(name)) name = "Guest";
-        GetComponent<PlayerSettings>().m_PlayerName = name;
+        PlayerSettings.LocalPlayerName = name;
 
         // 2) Swap UI to greeting
         greetingText.text = $"Welcome, {name}!";

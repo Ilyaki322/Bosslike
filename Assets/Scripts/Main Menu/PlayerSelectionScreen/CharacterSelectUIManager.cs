@@ -1,71 +1,70 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
+using Unity.Services.Authentication;
+using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Listens to player join/leave events and maintains the UI list.
-/// </summary>
 public class CharacterSelectUIManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private RectTransform listContainer;
     [SerializeField] private GameObject listItemPrefab;
-    [SerializeField] private Button m_disconnectButton;
+    [SerializeField] private Button disconnectButton;
 
+    [Header("Character Selection")]
+    [SerializeField] private CharacterDatabase m_characterDatabase;
+
+    // clientId → UI row
     private readonly Dictionary<ulong, PlayerListEntry> _entries = new();
 
     private void Awake()
     {
-        if (listContainer == null || listItemPrefab == null || m_disconnectButton == null)
-            Debug.LogError("CharacterSelectUIManager: Assign listContainer and listItemPrefab in the Inspector.");
-
-        m_disconnectButton.onClick.AddListener(OnDisconnectButtonClicked);
+        disconnectButton.onClick.AddListener(() =>
+            NetworkManager.Singleton.Shutdown());
     }
 
     private void OnEnable()
     {
-        PlayerNetworkInfo.OnPlayerJoined += HandlePlayerJoined;
-        PlayerNetworkInfo.OnPlayerLeft += HandlePlayerLeft;
+        var lm = LobbyManager.Instance;
+        lm.PlayerJoined += AddPlayerEntry;
+        lm.PlayerLeft += RemovePlayerEntry;
+        lm.PlayerPicked += UpdatePlayerEntry;
 
-        foreach (var netObj in NetworkManager.Singleton.SpawnManager.SpawnedObjects.Values)
-        {
-            var info = netObj.GetComponent<PlayerNetworkInfo>();
-            if (info != null)
-                HandlePlayerJoined(info);
-        }
+        foreach (var sel in lm.PlayerSelections)
+            AddPlayerEntry(sel.ClientId);
     }
 
     private void OnDisable()
     {
+        var lm = LobbyManager.Instance;
+        lm.PlayerJoined -= AddPlayerEntry;
+        lm.PlayerLeft -= RemovePlayerEntry;
+        lm.PlayerPicked -= UpdatePlayerEntry;
         ClearList();
-        PlayerNetworkInfo.OnPlayerJoined -= HandlePlayerJoined;
-        PlayerNetworkInfo.OnPlayerLeft -= HandlePlayerLeft;
     }
 
-    private void HandlePlayerJoined(PlayerNetworkInfo info)
+    private void AddPlayerEntry(ulong clientId)
     {
-        var clientId = info.OwnerClientId;
-        if (_entries.ContainsKey(clientId))
-            return;
+
+        var netObj = NetworkManager.Singleton
+                      .SpawnManager
+                      .GetPlayerNetworkObject(clientId);
+        if (netObj == null) return;
+
+        var info = netObj.GetComponent<PlayerNetworkInfo>();
+        if (info == null) return;
+
+        string playerName = info.DisplayName.Value.ToString();
+
+        if (_entries.ContainsKey(clientId)) return;
 
         var go = Instantiate(listItemPrefab, listContainer);
         var entry = go.GetComponent<PlayerListEntry>();
-        if (entry == null)
-        {
-            Debug.LogError("CharacterSelectUIManager: listItemPrefab missing PlayerListEntry script.");
-            return;
-        }
-
+        entry.Setup(playerName, clientId == NetworkManager.ServerClientId);
         _entries[clientId] = entry;
-        bool isHost = clientId == NetworkManager.ServerClientId;
-        entry.Setup(info.NameVar.Value.ToString(), isHost);
-
-        info.NameVar.OnValueChanged += (oldName, newName) =>
-            entry.UpdateName(newName.ToString());
     }
 
-    private void HandlePlayerLeft(ulong clientId)
+    private void RemovePlayerEntry(ulong clientId)
     {
         if (_entries.TryGetValue(clientId, out var entry))
         {
@@ -74,15 +73,19 @@ public class CharacterSelectUIManager : MonoBehaviour
         }
     }
 
-    public void OnDisconnectButtonClicked()
-    {   
-        NetworkManager.Singleton.Shutdown();
+    private void UpdatePlayerEntry(ulong clientId, int characterId)
+    {
+        if (!_entries.TryGetValue(clientId, out var entry))
+            return;
+
+        var data = m_characterDatabase.charactersData[characterId];
+        entry.SetCharacterName(data.Name);
     }
 
     private void ClearList()
     {
-        foreach (Transform child in listContainer)
-            Destroy(child.gameObject);
+        foreach (Transform t in listContainer)
+            Destroy(t.gameObject);
         _entries.Clear();
     }
 }
