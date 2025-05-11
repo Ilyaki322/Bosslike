@@ -1,85 +1,102 @@
 ﻿using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.Services.Authentication;
+using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CharacterSelectUIManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private RectTransform listContainer;
     [SerializeField] private GameObject listItemPrefab;
-    [SerializeField] private Button disconnectButton;
-
-    [Header("Character Selection")]
     [SerializeField] private CharacterDatabase m_characterDatabase;
 
     // clientId → UI row
     private readonly Dictionary<ulong, PlayerListEntry> _entries = new();
 
-    private void Awake()
-    {
-        disconnectButton.onClick.AddListener(() =>
-            NetworkManager.Singleton.Shutdown());
-    }
-
     private void OnEnable()
     {
-        var lm = LobbyManager.Instance;
-        lm.PlayerJoined += AddPlayerEntry;
-        lm.PlayerLeft += RemovePlayerEntry;
-        lm.PlayerPicked += UpdatePlayerEntry;
+        var netList = LobbyManager.Instance.PlayerSelections;
+        netList.OnListChanged += OnSelectionChanged;
+        NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
 
-        foreach (var sel in lm.PlayerSelections)
-            AddPlayerEntry(sel.ClientId);
+        ClearList();
+
+        foreach (var sel in netList)
+            SpawnRow(sel);
+
     }
 
     private void OnDisable()
     {
-        var lm = LobbyManager.Instance;
-        lm.PlayerJoined -= AddPlayerEntry;
-        lm.PlayerLeft -= RemovePlayerEntry;
-        lm.PlayerPicked -= UpdatePlayerEntry;
+        var netList = LobbyManager.Instance.PlayerSelections;
+        netList.OnListChanged -= OnSelectionChanged;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
         ClearList();
     }
 
-    private void AddPlayerEntry(ulong clientId)
+    private void HandleClientDisconnect(ulong clientId)
     {
+        RemovePlayerEntry(clientId);
+    }
 
-        var netObj = NetworkManager.Singleton
-                      .SpawnManager
-                      .GetPlayerNetworkObject(clientId);
-        if (netObj == null) return;
+    private void OnSelectionChanged(NetworkListEvent<PlayerSelection> evt)
+    {
+        switch (evt.Type)
+        {
+            case NetworkListEvent<PlayerSelection>.EventType.Add:
+                SpawnRow(evt.Value);
+                break;
 
-        var info = netObj.GetComponent<PlayerNetworkInfo>();
-        if (info == null) return;
+            case NetworkListEvent<PlayerSelection>.EventType.RemoveAt:
+                RemovePlayerEntry(evt.Value.ClientId);
+                break;
 
-        string playerName = info.DisplayName.Value.ToString();
+            case NetworkListEvent<PlayerSelection>.EventType.Value:
+                if (_entries.TryGetValue(evt.Value.ClientId, out var entry))
+                {
+                    entry.UpdateName(evt.Value.DisplayName.ToString());
 
-        if (_entries.ContainsKey(clientId)) return;
+                    // update pick text if they picked
+                    if (evt.Value.HasPicked)
+                    {
+                        var name = m_characterDatabase
+                                     .charactersData[evt.Value.PickedCharacterId]
+                                     .Name;
+                        entry.SetCharacterName(name);
+                    }
+                }
+                break;
+        }
+    }
+
+    private void SpawnRow(PlayerSelection sel)
+    {
+        if (_entries.ContainsKey(sel.ClientId)) return;
 
         var go = Instantiate(listItemPrefab, listContainer);
         var entry = go.GetComponent<PlayerListEntry>();
-        entry.Setup(playerName, clientId == NetworkManager.ServerClientId);
-        _entries[clientId] = entry;
+        bool isHost = sel.ClientId == NetworkManager.ServerClientId;
+
+        // name comes straight out of the shared list
+        entry.Setup(sel.DisplayName.ToString(), isHost);
+
+        _entries[sel.ClientId] = entry;
     }
 
     private void RemovePlayerEntry(ulong clientId)
     {
+        Debug.Log($"[UI#{NetworkManager.Singleton.LocalClientId}] RemovePlayerEntry({clientId}) — keys = {string.Join(",", _entries.Keys)}");
+
         if (_entries.TryGetValue(clientId, out var entry))
         {
+            Debug.Log($"[UI#{NetworkManager.Singleton.LocalClientId}]   ‣ Found it, destroying {entry.gameObject.name}");
             Destroy(entry.gameObject);
             _entries.Remove(clientId);
         }
-    }
-
-    private void UpdatePlayerEntry(ulong clientId, int characterId)
-    {
-        if (!_entries.TryGetValue(clientId, out var entry))
-            return;
-
-        var data = m_characterDatabase.charactersData[characterId];
-        entry.SetCharacterName(data.Name);
+        else
+        {
+            Debug.Log($"[UI#{NetworkManager.Singleton.LocalClientId}]   ‣ ❌ No entry found for {clientId}");
+        }
     }
 
     private void ClearList()

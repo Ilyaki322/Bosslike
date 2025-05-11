@@ -1,6 +1,5 @@
 ﻿using System;
 using Unity.Netcode;
-using Unity.Services.Qos.V2.Models;
 using UnityEngine;
 
 public class LobbyManager : NetworkBehaviour
@@ -11,131 +10,104 @@ public class LobbyManager : NetworkBehaviour
     public event Action<ulong> PlayerLeft;
     public event Action<ulong, int> PlayerPicked;
 
-    public NetworkList<PlayerSelection> PlayerSelections { get; private set; }
-        = new NetworkList<PlayerSelection>(
-              default,
-              NetworkVariableReadPermission.Everyone,
-              NetworkVariableWritePermission.Server
-          );
+    public NetworkList<PlayerSelection> PlayerSelections
+      = new NetworkList<PlayerSelection>(
+          default,
+          NetworkVariableReadPermission.Everyone,
+          NetworkVariableWritePermission.Server
+    );
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
         else Destroy(gameObject);
     }
 
     public override void OnNetworkSpawn()
     {
-        RegisterServerCallbacks();
+        Debug.Log($"[OnNetworkSpawn] IsServer={IsServer}  ClientId={NetworkManager.Singleton.LocalClientId}");
+        // Listen *before* seeding so host (ID 0) fires too
         PlayerSelections.OnListChanged += HandleListChanged;
+
+        if (!IsServer) return;
+        PlayerSelections.Clear();
+        // Seed existing (including host)
+        foreach (var c in NetworkManager.Singleton.ConnectedClientsList)
+            AddSelection(c.ClientId);
+
+        // Future joins/leaves
+        NetworkManager.Singleton.OnClientConnectedCallback += AddSelection;
+        NetworkManager.Singleton.OnClientDisconnectCallback += RemoveSelection;
     }
 
     public override void OnDestroy()
     {
-        if (NetworkManager.Singleton != null)
-            NetworkManager.Singleton.OnClientConnectedCallback
-                -= OnClientConnected;
-
         PlayerSelections.OnListChanged -= HandleListChanged;
-    }
 
-    private void RegisterServerCallbacks()
-    {
-        if (!IsServer) return;
-
-        foreach (var c in NetworkManager.Singleton.ConnectedClientsList)
-            AddSelection(c.ClientId);
-
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
-    }
-
-    private void OnClientConnected(ulong clientId)
-    {
-        AddSelection(clientId);
-    }
-
-    private void OnClientDisconnected(ulong clientId)
-    {
-        RemoveSelection(clientId);
+        if (NetworkManager.Singleton != null && IsServer)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= AddSelection;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= RemoveSelection;
+        }
     }
 
     private void AddSelection(ulong clientId)
     {
-        // don't add twice
-        for (int i = 0; i < PlayerSelections.Count; i++)
-            if (PlayerSelections[i].ClientId == clientId)
-                return;
+        if (FindPlayerIndex(clientId) >= 0) return;
 
-        var netObj = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
-        var info = netObj?.GetComponent<PlayerNetworkInfo>();
-        if (info == null) return;
-
-        // 1) add the empty entry
-        PlayerSelections.Add(new PlayerSelection
+        var netObj = NetworkManager.Singleton.SpawnManager
+                             .GetPlayerNetworkObject(clientId);
+        var info = netObj.GetComponent<PlayerNetworkInfo>();
+        var sel = new PlayerSelection
         {
             ClientId = clientId,
+            DisplayName = info.DisplayName.Value,
             HasPicked = false,
             PickedCharacterId = -1
-        });
+        };
 
-        // 2) now watch for when the name actually arrives
+        PlayerSelections.Add(sel);
+
         info.DisplayName.OnValueChanged += (oldName, newName) =>
         {
-            // fire only once
-            info.DisplayName.OnValueChanged -= null;
-            Debug.Log($"[{clientId}] name arrived: {newName}");
-            PlayerJoined?.Invoke(clientId);
+            var idx = FindPlayerIndex(clientId);
+            if (idx < 0) return;
+            var updated = PlayerSelections[idx];
+            updated.DisplayName = newName;
+            PlayerSelections[idx] = updated;
         };
     }
 
-
     private void RemoveSelection(ulong clientId)
     {
+        int idx = FindPlayerIndex(clientId);
+        if (idx >= 0)
+            PlayerSelections.RemoveAt(idx);
+    }
+
+    int FindPlayerIndex(ulong clientId)
+    {
         for (int i = 0; i < PlayerSelections.Count; i++)
-            if (PlayerSelections[i].ClientId == clientId)
-            {
-                PlayerSelections.RemoveAt(i);
-                return;
-            }
+            if (PlayerSelections[i].ClientId == clientId) return i;
+        return -1;
     }
 
     private void HandleListChanged(NetworkListEvent<PlayerSelection> evt)
     {
         switch (evt.Type)
         {
+            case NetworkListEvent<PlayerSelection>.EventType.Add:
+                PlayerJoined?.Invoke(evt.Value.ClientId);
+                break;
+
             case NetworkListEvent<PlayerSelection>.EventType.Remove:
                 PlayerLeft?.Invoke(evt.Value.ClientId);
                 break;
 
             case NetworkListEvent<PlayerSelection>.EventType.Value:
                 if (evt.Value.HasPicked)
-                    PlayerPicked?.Invoke(
-                        evt.Value.ClientId,
-                        evt.Value.PickedCharacterId
-                    );
+                    PlayerPicked?.Invoke(evt.Value.ClientId, evt.Value.PickedCharacterId);
                 break;
-        }
-    }
-
-    [ServerRpc(RequireOwnership = true)]
-    public void RequestPickCharacterServerRpc(int characterId, ServerRpcParams rpc = default)
-    {
-        if (!IsServer) return;
-
-        ulong sender = rpc.Receive.SenderClientId;
-        for (int i = 0; i < PlayerSelections.Count; i++)
-        {
-            if (PlayerSelections[i].ClientId != sender) continue;
-            var sel = PlayerSelections[i];
-            sel.HasPicked = true;
-            sel.PickedCharacterId = characterId;
-            PlayerSelections[i] = sel;
-            break;
         }
     }
 }

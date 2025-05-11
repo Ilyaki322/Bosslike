@@ -30,8 +30,6 @@ public class PopulateCharacters : MonoBehaviour
 
     private void OnCardClicked(int characterId)
     {
-        LobbyManager.Instance.RequestPickCharacterServerRpc(characterId);
-
         if (Cards.TryGetValue(characterId, out var card))
             card.SetSelectable(false);
     }

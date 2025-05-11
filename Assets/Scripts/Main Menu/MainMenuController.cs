@@ -29,18 +29,31 @@ public class MainMenuController : MonoBehaviour
     {
         singlePlayerButton.onClick.RemoveListener(StartHost);
         multiPlayerButton.onClick.RemoveListener(StartClient);
+
+        if (NetworkManager.Singleton != null)
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
 
     private void StartHost()
     {
-        SwitchToLobby();
+        var nm = NetworkManager.Singleton;
+        nm.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.StartHost();
     }
 
     private void StartClient()
     {
-        SwitchToLobby();
+        var nm = NetworkManager.Singleton;
+        nm.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.StartClient();
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        if (clientId == NetworkManager.Singleton.LocalClientId)
+        {
+            SwitchToLobby();
+        }
     }
 
     private void SwitchToLobby()
