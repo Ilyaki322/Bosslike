@@ -56,6 +56,7 @@ MonoBehaviour:
   characterImage: {fileID: 8623829222398148142}
   characterName: {fileID: 5118973715580369794}
   selectBTN: {fileID: 1288985572908178305}
+  selectionBG: {fileID: 2998263193021801330}
 --- !u!1 &1841153240613405647
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +303,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 250, y: 250}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2392921775593197578
 CanvasRenderer:

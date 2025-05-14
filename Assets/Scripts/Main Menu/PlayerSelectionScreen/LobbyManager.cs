@@ -25,7 +25,6 @@ public class LobbyManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        Debug.Log($"[OnNetworkSpawn] IsServer={IsServer}  ClientId={NetworkManager.Singleton.LocalClientId}");
         // Listen *before* seeding so host (ID 0) fires too
         PlayerSelections.OnListChanged += HandleListChanged;
 
@@ -100,14 +99,28 @@ public class LobbyManager : NetworkBehaviour
                 PlayerJoined?.Invoke(evt.Value.ClientId);
                 break;
 
-            case NetworkListEvent<PlayerSelection>.EventType.Remove:
+            case NetworkListEvent<PlayerSelection>.EventType.RemoveAt:
+                Debug.Log($"[LobbyManager] 👉 firing PlayerLeft for {evt.Value.ClientId}");
                 PlayerLeft?.Invoke(evt.Value.ClientId);
                 break;
 
             case NetworkListEvent<PlayerSelection>.EventType.Value:
-                if (evt.Value.HasPicked)
+                if (evt.Value.PickedCharacterId >= 0)
                     PlayerPicked?.Invoke(evt.Value.ClientId, evt.Value.PickedCharacterId);
                 break;
         }
+    }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    public void PickCharacterServerRpc(int characterId, ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        int selectionIdx = FindPlayerIndex(clientId);
+        if (selectionIdx < 0) return;
+
+        var sel = PlayerSelections[selectionIdx];
+        sel.PickedCharacterId = characterId;
+        PlayerSelections[selectionIdx] = sel;
     }
 }

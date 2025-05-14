@@ -7,6 +7,7 @@ public class CharacterCard : MonoBehaviour
     [SerializeField] private Image characterImage;
     [SerializeField] private TMP_Text characterName;
     [SerializeField] private Button selectBTN;
+    [SerializeField] private GameObject selectionBG;
 
     int m_characterId;
     System.Action<int> CharOnClick;
@@ -25,5 +26,6 @@ public class CharacterCard : MonoBehaviour
     public void SetSelectable(bool selectable)
     {
         selectBTN.enabled = selectable;
+        selectionBG.SetActive(!selectable);
     }
 }

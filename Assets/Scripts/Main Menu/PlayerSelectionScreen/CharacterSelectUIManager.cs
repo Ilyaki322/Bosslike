@@ -57,7 +57,7 @@ public class CharacterSelectUIManager : MonoBehaviour
                     entry.UpdateName(evt.Value.DisplayName.ToString());
 
                     // update pick text if they picked
-                    if (evt.Value.HasPicked)
+                    if (evt.Value.PickedCharacterId >= 0)
                     {
                         var name = m_characterDatabase
                                      .charactersData[evt.Value.PickedCharacterId]
@@ -85,17 +85,10 @@ public class CharacterSelectUIManager : MonoBehaviour
 
     private void RemovePlayerEntry(ulong clientId)
     {
-        Debug.Log($"[UI#{NetworkManager.Singleton.LocalClientId}] RemovePlayerEntry({clientId}) — keys = {string.Join(",", _entries.Keys)}");
-
         if (_entries.TryGetValue(clientId, out var entry))
         {
-            Debug.Log($"[UI#{NetworkManager.Singleton.LocalClientId}]   ‣ Found it, destroying {entry.gameObject.name}");
             Destroy(entry.gameObject);
             _entries.Remove(clientId);
-        }
-        else
-        {
-            Debug.Log($"[UI#{NetworkManager.Singleton.LocalClientId}]   ‣ ❌ No entry found for {clientId}");
         }
     }
 
