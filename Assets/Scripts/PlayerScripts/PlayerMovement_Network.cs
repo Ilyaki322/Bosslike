@@ -15,7 +15,7 @@ public class PlayerMovement_Network : NetworkBehaviour {
 
     private void FixedUpdate() {
         ProcessMovement();
-        LookAtMouse();
+        //LookAtMouse();
     }
 
     private void ProcessMovement()
@@ -46,6 +46,12 @@ public class PlayerMovement_Network : NetworkBehaviour {
 
     public float GetRotationAngle()
     {
-        return Mathf.Atan2(m_player.transform.up.y, m_player.transform.up.x) * Mathf.Rad2Deg;
+        //return Mathf.Atan2(m_player.transform.up.y, m_player.transform.up.x) * Mathf.Rad2Deg;
+        Vector3 mouseScreenPos = Input.mousePosition;
+        Vector3 mouseWorldPos = m_cam.ScreenToWorldPoint(mouseScreenPos);
+
+        Vector2 direction = mouseWorldPos - m_player.position;
+
+        return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
     }
 }
