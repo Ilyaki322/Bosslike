@@ -11,7 +11,8 @@ public class PlayerCombat : NetworkBehaviour
 
     [SerializeField] Animator m_animator;
     [SerializeField] NetworkAnimator m_networkAnimator;
-    [SerializeField] List<AbilitySO> m_abilities;
+    //[SerializeField] List<AbilitySO> m_abilities;
+    [SerializeField] List<Ability> m_abilities;
 
     [HideInInspector] public Vector2 m_mousePosition;
 
@@ -37,7 +38,7 @@ public class PlayerCombat : NetworkBehaviour
         }
 
         UseAbilityServerRpc(new Vector2(mousePos.x, mousePos.y), i, NetworkManager.Singleton.LocalClientId);
-        //m_abilities[i].Use();
+        //m_abilities[i].Use(this, 0);
     }
 
     [Rpc(SendTo.Server)]

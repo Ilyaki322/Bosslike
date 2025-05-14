@@ -37,13 +37,15 @@ public class PlayerMovement_Network : NetworkBehaviour {
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         m_player.rotation = Quaternion.Euler(0f, 0f, angle);
-
-        //if (direction.magnitude > 0.1f)
-        //{
-        //    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //    m_player.rotation = Quaternion.Euler(0f, 0f, angle);
-        //}
     }
 
+    public Vector3 GetLookDirection()
+    {
+        return transform.up;
+    }
 
+    public float GetRotationAngle()
+    {
+        return Mathf.Atan2(m_player.transform.up.y, m_player.transform.up.x) * Mathf.Rad2Deg;
+    }
 }
