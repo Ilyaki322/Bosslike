@@ -15,6 +15,7 @@ public class PlayerNetworkController : NetworkBehaviour
     [SerializeField] private PlayerCombat m_combat;
     [SerializeField] private PlayerInputManager m_pim;
     [SerializeField] private Rigidbody2D m_rb;
+    [SerializeField] private AnimationController m_animController;
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class PlayerNetworkController : NetworkBehaviour
         m_camera.enabled = false;
         m_combat.enabled = false;
         m_pim.enabled = false;
+        m_animController.enabled = false;
     }
     public override void OnNetworkSpawn()
     {
@@ -35,6 +37,7 @@ public class PlayerNetworkController : NetworkBehaviour
             m_camera.enabled = true;
             m_combat.enabled = true;
             m_pim.enabled = true;
+            m_animController.enabled = true;    
 
             m_camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }

@@ -188,6 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f833491a9d6af4396db672fde3efec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &4096015724566326040
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,6 +729,7 @@ MonoBehaviour:
   m_combat: {fileID: -6184401918218680807}
   m_pim: {fileID: 3671899376744937596}
   m_rb: {fileID: -2183317777147763284}
+  m_animController: {fileID: 930234122460922719}
 --- !u!58 &-7659173095810208794
 CircleCollider2D:
   m_ObjectHideFlags: 0

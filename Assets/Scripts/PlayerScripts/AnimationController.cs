@@ -1,7 +1,8 @@
+using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-public class AnimationController : MonoBehaviour
+public class AnimationController : NetworkBehaviour
 {
     PlayerMovement_Network m_movement;
     NetworkAnimator m_animator;
@@ -27,8 +28,6 @@ public class AnimationController : MonoBehaviour
     {
         float angle = m_movement.GetRotationAngle();
         int sector = Mathf.FloorToInt((angle + 360) % 360 / 45f);
-
-        print(sector);
 
         if (sector == 6 || sector == 7) m_animator.SetTrigger(m_LookSE);
         if (sector == 0 || sector == 1) m_animator.SetTrigger(m_LookNE);
