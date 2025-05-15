@@ -9,6 +9,10 @@ public class LobbyManager : NetworkBehaviour
     public event Action<ulong> PlayerJoined;
     public event Action<ulong> PlayerLeft;
     public event Action<ulong, int> PlayerPicked;
+    public event Action<ulong, bool> PlayerReady;
+    public event Action CountdownStarted;
+
+    private bool _countdownInProgress;
 
     public NetworkList<PlayerSelection> PlayerSelections
       = new NetworkList<PlayerSelection>(
@@ -25,16 +29,14 @@ public class LobbyManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        // Listen *before* seeding so host (ID 0) fires too
         PlayerSelections.OnListChanged += HandleListChanged;
 
         if (!IsServer) return;
         PlayerSelections.Clear();
-        // Seed existing (including host)
+
         foreach (var c in NetworkManager.Singleton.ConnectedClientsList)
             AddSelection(c.ClientId);
 
-        // Future joins/leaves
         NetworkManager.Singleton.OnClientConnectedCallback += AddSelection;
         NetworkManager.Singleton.OnClientDisconnectCallback += RemoveSelection;
     }
@@ -61,7 +63,7 @@ public class LobbyManager : NetworkBehaviour
         {
             ClientId = clientId,
             DisplayName = info.DisplayName.Value,
-            HasPicked = false,
+            isReady = false,
             PickedCharacterId = -1
         };
 
@@ -75,6 +77,8 @@ public class LobbyManager : NetworkBehaviour
             updated.DisplayName = newName;
             PlayerSelections[idx] = updated;
         };
+
+        ClearAllReady();
     }
 
     private void RemoveSelection(ulong clientId)
@@ -82,6 +86,24 @@ public class LobbyManager : NetworkBehaviour
         int idx = FindPlayerIndex(clientId);
         if (idx >= 0)
             PlayerSelections.RemoveAt(idx);
+
+        ClearAllReady();
+    }
+
+    private void ClearAllReady()
+    {
+        for (int i = 0; i < PlayerSelections.Count; i++)
+        {
+            var sel = PlayerSelections[i];
+            if (sel.isReady)
+            {
+                Debug.Log($"Clearing ready for {sel.ClientId}");
+                sel.isReady = false;
+                PlayerSelections[i] = sel;
+            }
+        }
+
+        _countdownInProgress = false;
     }
 
     int FindPlayerIndex(ulong clientId)
@@ -100,15 +122,41 @@ public class LobbyManager : NetworkBehaviour
                 break;
 
             case NetworkListEvent<PlayerSelection>.EventType.RemoveAt:
-                Debug.Log($"[LobbyManager] 👉 firing PlayerLeft for {evt.Value.ClientId}");
                 PlayerLeft?.Invoke(evt.Value.ClientId);
                 break;
 
             case NetworkListEvent<PlayerSelection>.EventType.Value:
                 if (evt.Value.PickedCharacterId >= 0)
                     PlayerPicked?.Invoke(evt.Value.ClientId, evt.Value.PickedCharacterId);
+
+                if(evt.Value.isReady)
+                    PlayerReady?.Invoke(evt.Value.ClientId, evt.Value.isReady);
+
+                if (IsServer)
+                    TryStartGameCountdown();
                 break;
         }
+    }
+
+    private void TryStartGameCountdown()
+    {
+        if (_countdownInProgress) return;
+
+        if (PlayerSelections.Count <= 0) return;
+
+        foreach (var sel in PlayerSelections)
+        {
+            if (!sel.isReady) return;
+        }
+        _countdownInProgress = true;
+
+        StartGameCountdownClientRpc();
+    }
+
+    [ClientRpc]
+    private void StartGameCountdownClientRpc()
+    {
+        CountdownStarted?.Invoke();
     }
 
 
@@ -121,6 +169,19 @@ public class LobbyManager : NetworkBehaviour
 
         var sel = PlayerSelections[selectionIdx];
         sel.PickedCharacterId = characterId;
+        sel.isReady = false;
         PlayerSelections[selectionIdx] = sel;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetReadyServerRpc(bool isReady, ServerRpcParams rpcParams = default)
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        int idx = FindPlayerIndex(clientId);
+        if (idx < 0) return;
+
+        var sel = PlayerSelections[idx];
+        sel.isReady = isReady;
+        PlayerSelections[idx] = sel;
     }
 }

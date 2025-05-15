@@ -23,6 +23,7 @@ public class PopulateCharacters : MonoBehaviour
         InitializeCards();
 
         // When this client disconnects, clear local state
+        NetworkManager.Singleton.OnClientConnectedCallback += OnAnyClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnAnyClientDisconnect;
         // Bootstrap picks and subscribe to lobby events
         InitPicked();
@@ -32,6 +33,7 @@ public class PopulateCharacters : MonoBehaviour
     {
         // Unsubscribe network callbacks
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnAnyClientDisconnect;
+        NetworkManager.Singleton.OnClientConnectedCallback -= OnAnyClientConnected;
 
         // Unsubscribe lobby events
         LobbyManager.Instance.PlayerJoined -= OnPlayerJoined;
@@ -41,9 +43,20 @@ public class PopulateCharacters : MonoBehaviour
         lastPickByClient.Clear();
     }
 
+    private void OnAnyClientConnected(ulong clientId)
+    {
+        if (clientId == NetworkManager.Singleton.LocalClientId)
+        {
+            foreach (var card in Cards.Values)
+                card.SetSelectable(true);
+
+            lastPickByClient.Clear();
+            InitPicked();
+        }
+    }
+
     private void OnAnyClientDisconnect(ulong clientId)
     {
-        // If we ourselves disconnect, reset all cards and state
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
             foreach (var kv in Cards)

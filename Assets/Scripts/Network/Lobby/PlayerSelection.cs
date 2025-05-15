@@ -7,13 +7,13 @@ public struct PlayerSelection : INetworkSerializable, IEquatable<PlayerSelection
 {
     public ulong ClientId;
     public FixedString64Bytes DisplayName;
-    public bool HasPicked;
+    public bool isReady;
     public int PickedCharacterId;
 
     public bool Equals(PlayerSelection other) =>
         ClientId == other.ClientId
      && DisplayName.Equals(other.DisplayName)
-     && HasPicked == other.HasPicked
+     && isReady == other.isReady
      && PickedCharacterId == other.PickedCharacterId;
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer)
@@ -21,7 +21,7 @@ public struct PlayerSelection : INetworkSerializable, IEquatable<PlayerSelection
     {
         serializer.SerializeValue(ref ClientId);
         serializer.SerializeValue(ref DisplayName);
-        serializer.SerializeValue(ref HasPicked);
+        serializer.SerializeValue(ref isReady);
         serializer.SerializeValue(ref PickedCharacterId);
     }
 }

@@ -17,6 +17,7 @@ public class CharacterSelectUIManager : MonoBehaviour
     {
         var netList = LobbyManager.Instance.PlayerSelections;
         netList.OnListChanged += OnSelectionChanged;
+        LobbyManager.Instance.PlayerReady += OnPlayerReady;
         NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
 
         ClearList();
@@ -30,6 +31,7 @@ public class CharacterSelectUIManager : MonoBehaviour
     {
         var netList = LobbyManager.Instance.PlayerSelections;
         netList.OnListChanged -= OnSelectionChanged;
+        LobbyManager.Instance.PlayerReady -= OnPlayerReady;
         NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
         ClearList();
     }
@@ -52,20 +54,25 @@ public class CharacterSelectUIManager : MonoBehaviour
                 break;
 
             case NetworkListEvent<PlayerSelection>.EventType.Value:
-                if (_entries.TryGetValue(evt.Value.ClientId, out var entry))
-                {
-                    entry.UpdateName(evt.Value.DisplayName.ToString());
-
-                    // update pick text if they picked
-                    if (evt.Value.PickedCharacterId >= 0)
-                    {
-                        var name = m_characterDatabase
-                                     .charactersData[evt.Value.PickedCharacterId]
-                                     .Name;
-                        entry.SetCharacterName(name);
-                    }
-                }
+                HandleValueChange(evt);
                 break;
+        }
+    }
+
+    private void HandleValueChange(NetworkListEvent<PlayerSelection> evt)
+    {
+        if (_entries.TryGetValue(evt.Value.ClientId, out var entry))
+        {
+            entry.UpdateName(evt.Value.DisplayName.ToString());
+
+            // update pick text if they picked
+            if (evt.Value.PickedCharacterId >= 0)
+            {
+                var name = m_characterDatabase
+                             .charactersData[evt.Value.PickedCharacterId]
+                             .Name;
+                entry.SetCharacterName(name);
+            }
         }
     }
 
@@ -79,8 +86,27 @@ public class CharacterSelectUIManager : MonoBehaviour
 
         // name comes straight out of the shared list
         entry.Setup(sel.DisplayName.ToString(), isHost);
+        InitCharacterName(sel, entry);
+        entry.SetReady(sel.isReady);
 
         _entries[sel.ClientId] = entry;
+    }
+
+    private void OnPlayerReady(ulong clientId, bool isReady)
+    {
+        if (_entries.TryGetValue(clientId, out var entry))
+            entry.SetReady(isReady);
+    }
+
+    private void InitCharacterName(PlayerSelection sel, PlayerListEntry entry)
+    {
+        if (sel.PickedCharacterId >= 0)
+        {
+            var name = m_characterDatabase
+                           .charactersData[sel.PickedCharacterId]
+                           .Name;
+            entry.SetCharacterName(name);
+        }
     }
 
     private void RemovePlayerEntry(ulong clientId)
