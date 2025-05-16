@@ -11,6 +11,7 @@ public class LobbyManager : NetworkBehaviour
     public event Action<ulong, int> PlayerPicked;
     public event Action<ulong, bool> PlayerReady;
     public event Action CountdownStarted;
+    public event Action CountdownCanceled;
 
     private bool _countdownInProgress;
 
@@ -92,18 +93,24 @@ public class LobbyManager : NetworkBehaviour
 
     private void ClearAllReady()
     {
+
+        if (!IsServer) return;
+
         for (int i = 0; i < PlayerSelections.Count; i++)
         {
             var sel = PlayerSelections[i];
             if (sel.isReady)
             {
-                Debug.Log($"Clearing ready for {sel.ClientId}");
                 sel.isReady = false;
                 PlayerSelections[i] = sel;
             }
         }
 
-        _countdownInProgress = false;
+        if (_countdownInProgress)
+        {
+            _countdownInProgress = false;
+            CancelCountdownClientRpc();
+        }
     }
 
     int FindPlayerIndex(ulong clientId)
@@ -119,18 +126,21 @@ public class LobbyManager : NetworkBehaviour
         {
             case NetworkListEvent<PlayerSelection>.EventType.Add:
                 PlayerJoined?.Invoke(evt.Value.ClientId);
+                ClearAllReady();
                 break;
 
             case NetworkListEvent<PlayerSelection>.EventType.RemoveAt:
                 PlayerLeft?.Invoke(evt.Value.ClientId);
+                ClearAllReady();
                 break;
 
             case NetworkListEvent<PlayerSelection>.EventType.Value:
                 if (evt.Value.PickedCharacterId >= 0)
+                {
                     PlayerPicked?.Invoke(evt.Value.ClientId, evt.Value.PickedCharacterId);
+                }
 
-                if(evt.Value.isReady)
-                    PlayerReady?.Invoke(evt.Value.ClientId, evt.Value.isReady);
+                PlayerReady?.Invoke(evt.Value.ClientId, evt.Value.isReady);
 
                 if (IsServer)
                     TryStartGameCountdown();
@@ -159,6 +169,11 @@ public class LobbyManager : NetworkBehaviour
         CountdownStarted?.Invoke();
     }
 
+    [ClientRpc]
+    private void CancelCountdownClientRpc()
+    {
+        CountdownCanceled?.Invoke();
+    }
 
     [ServerRpc(RequireOwnership = false)]
     public void PickCharacterServerRpc(int characterId, ServerRpcParams rpcParams = default)

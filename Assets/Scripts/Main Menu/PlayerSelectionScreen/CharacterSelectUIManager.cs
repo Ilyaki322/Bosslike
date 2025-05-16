@@ -2,6 +2,7 @@
 using Unity.Netcode;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using WebSocketSharp;
 
 public class CharacterSelectUIManager : MonoBehaviour
 {
@@ -74,6 +75,8 @@ public class CharacterSelectUIManager : MonoBehaviour
                 entry.SetCharacterName(name);
             }
         }
+
+        entry.SetReady(evt.Value.isReady);
     }
 
     private void SpawnRow(PlayerSelection sel)
@@ -107,6 +110,8 @@ public class CharacterSelectUIManager : MonoBehaviour
                            .Name;
             entry.SetCharacterName(name);
         }
+
+        entry.SetReady(sel.isReady);
     }
 
     private void RemovePlayerEntry(ulong clientId)

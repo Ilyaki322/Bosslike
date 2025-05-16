@@ -21,6 +21,7 @@ public class LobbyUIController : MonoBehaviour
     [SerializeField] private Button m_readyButton;
 
     private string initCountdownText;
+    private Coroutine _countdownRoutine;
 
     private void OnEnable()
     {
@@ -34,6 +35,7 @@ public class LobbyUIController : MonoBehaviour
         NetworkManager.Singleton.OnClientDisconnectCallback += HandleLocalDisconnect;
         LobbyManager.Instance.PlayerPicked += OnPlayerPicked;
         LobbyManager.Instance.CountdownStarted += BeginCountdown;
+        LobbyManager.Instance.CountdownCanceled += OnCancelCountdown;
     }
 
     private void OnDisable()
@@ -42,13 +44,25 @@ public class LobbyUIController : MonoBehaviour
         m_readyButton.onClick.RemoveListener(OnReadyClicked);
 
         LobbyManager.Instance.CountdownStarted -= BeginCountdown;
+        LobbyManager.Instance.CountdownCanceled -= OnCancelCountdown;
         LobbyManager.Instance.PlayerPicked -= OnPlayerPicked;
         NetworkManager.Singleton.OnClientDisconnectCallback -= HandleLocalDisconnect;
     }
 
     private void BeginCountdown()
     {
-        StartCoroutine(CountdownCoroutine());
+        if (_countdownRoutine != null) StopCoroutine(_countdownRoutine);
+        _countdownRoutine = StartCoroutine(CountdownCoroutine());
+    }
+
+    private void OnCancelCountdown()
+    {
+        if (_countdownRoutine != null)
+        {
+            StopCoroutine(_countdownRoutine);
+            _countdownRoutine = null;
+        }
+        m_countdownText.gameObject.SetActive(false);
     }
 
     private IEnumerator CountdownCoroutine()
@@ -61,6 +75,7 @@ public class LobbyUIController : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         m_countdownText.gameObject.SetActive(false);
+        _countdownRoutine = null;
 
         if (NetworkManager.Singleton.IsServer)
         {
@@ -81,7 +96,6 @@ public class LobbyUIController : MonoBehaviour
             {
                 if (sels.PickedCharacterId < 0)
                 {
-                    Debug.LogWarning("Select a character before you can ready up!");
                     return;
                 }
                 break;
