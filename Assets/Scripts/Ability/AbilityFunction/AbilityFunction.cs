@@ -16,6 +16,7 @@ public abstract class AbilityFunction : NetworkBehaviour
     }
 
     protected abstract void Use();
+    protected abstract void Init();
 
     public override void OnDestroy()
     {

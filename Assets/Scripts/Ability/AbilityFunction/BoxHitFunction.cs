@@ -10,7 +10,12 @@ public class BoxHitFunction : AbilityFunction
     Collider2D[] m_detected;
     Vector2 m_offset;
 
-    [SerializeField] PlayerMovement_Network m_movement; // refactor to get from somewhere
+    PlayerMovement_Network m_movement;
+
+    protected override void Init()
+    {
+        m_movement = GetComponent<PlayerMovement_Network>();
+    }
 
     protected override void Use()
     {

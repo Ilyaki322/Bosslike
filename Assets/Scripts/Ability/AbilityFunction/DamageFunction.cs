@@ -3,7 +3,7 @@ using UnityEngine;
 public class DamageFunction : AbilityFunction
 {
     [SerializeField] DamageData m_data;
-    [SerializeField] BoxHitFunction m_boxhit;
+    BoxHitFunction m_boxhit;
 
     protected override void Start()
     {
@@ -11,6 +11,11 @@ public class DamageFunction : AbilityFunction
         m_boxhit.OnDetected += dealDamage;
     }
     protected override void Use() {}
+
+    protected override void Init()
+    {
+        m_boxhit = GetComponent<BoxHitFunction>();
+    }
 
     void dealDamage(Collider2D[] targets)
     {
