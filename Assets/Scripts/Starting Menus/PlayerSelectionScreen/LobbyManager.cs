@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -117,6 +118,7 @@ public class LobbyManager : NetworkBehaviour
     {
         for (int i = 0; i < PlayerSelections.Count; i++)
             if (PlayerSelections[i].ClientId == clientId) return i;
+
         return -1;
     }
 
@@ -198,5 +200,13 @@ public class LobbyManager : NetworkBehaviour
         var sel = PlayerSelections[idx];
         sel.isReady = isReady;
         PlayerSelections[idx] = sel;
+    }
+
+    public PlayerSelection GetSelection(ulong clientId)
+    {
+        int idx = FindPlayerIndex(clientId);
+        if (idx < 0)
+            throw new KeyNotFoundException($"No lobby entry for client {clientId}.");
+        return PlayerSelections[idx];
     }
 }

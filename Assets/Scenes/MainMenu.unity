@@ -3571,7 +3571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_countdownText: {fileID: 991464523}
-  m_nextSceneName: MainGame
+  m_nextSceneName: LoadingLobbyToGame
   m_mainMenu: {fileID: 1547868804}
   m_lobby: {fileID: 3944275116194914525}
   m_disconnectButton: {fileID: 1146302853}
