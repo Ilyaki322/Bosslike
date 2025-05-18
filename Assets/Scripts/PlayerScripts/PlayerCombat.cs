@@ -18,6 +18,7 @@ public class PlayerCombat : NetworkBehaviour
 
     public void Awake()
     {
+        if (!IsOwner) return;
         m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
     }
 

@@ -16,12 +16,12 @@ MonoBehaviour:
   - Id: 0
     Name: Yoni
     Icon: {fileID: -2413806693520163455, guid: 08cfc502a5a425640a0f16e9fee26fd3, type: 3}
-    Prefab: {fileID: 3160118534778775924, guid: 10fa5e5cd57ed604fa940f91aaaac79d, type: 3}
+    Prefab: {fileID: 8877230402697404518, guid: ab5431cae72c0af44bd5170e18aa8df1, type: 3}
   - Id: 1
     Name: Hataim
     Icon: {fileID: 7482667652216324306, guid: b456495dd18b1f6419033e7ecaca6844, type: 3}
-    Prefab: {fileID: 3160118534778775924, guid: 10fa5e5cd57ed604fa940f91aaaac79d, type: 3}
+    Prefab: {fileID: 8877230402697404518, guid: ab5431cae72c0af44bd5170e18aa8df1, type: 3}
   - Id: 2
     Name: Gary
     Icon: {fileID: 3625043607559282579, guid: 3876af24dc5c4c74bafcefb6a58b94ab, type: 3}
-    Prefab: {fileID: 3160118534778775924, guid: 10fa5e5cd57ed604fa940f91aaaac79d, type: 3}
+    Prefab: {fileID: 8877230402697404518, guid: ab5431cae72c0af44bd5170e18aa8df1, type: 3}
