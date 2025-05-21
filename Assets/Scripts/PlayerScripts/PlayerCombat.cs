@@ -57,17 +57,17 @@ public class PlayerCombat : NetworkBehaviour
             return;
         }
 
-        UseAbilityServerRpc(new Vector2(mousePos.x, mousePos.y), i, NetworkManager.Singleton.LocalClientId);
-        //m_abilities[i].Use(this, 0);
+        //UseAbilityServerRpc(new Vector2(mousePos.x, mousePos.y), i, NetworkManager.Singleton.LocalClientId);
+        m_abilities[i].Use(NetworkManager.Singleton.LocalClientId);
     }
 
-    [Rpc(SendTo.Server)]
-    private void UseAbilityServerRpc(Vector2 mousePos, int i, ulong user)
-    {
-        print("HUI");
-        m_mousePosition = mousePos;
-        m_abilities[i].Use(this, user);
-    }
+    //[Rpc(SendTo.Server)]
+    //private void UseAbilityServerRpc(Vector2 mousePos, int i, ulong user)
+    //{
+    //    print("HUI");
+    //    m_mousePosition = mousePos;
+    //    m_abilities[i].Use(this, user);
+    //}
 
     // Manage Ability Cooldown
 }

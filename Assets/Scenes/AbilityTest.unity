@@ -15551,7 +15551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  m_maxHP: 100
+  m_maxHP: 120
   m_hpbar: {fileID: 2020649690}
   m_dmgPopup: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
 --- !u!58 &1840755506

@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class DamageFunction : AbilityFunction
@@ -21,7 +22,7 @@ public class DamageFunction : AbilityFunction
         {
             if(hit.TryGetComponent<Healthbar_Network>(out Healthbar_Network hb))
             {
-                hb.TakeDamage(m_data.Damage, 0); // fix user hb.TakeDamage(5f, user);
+                hb.TakeDamage(m_data.Damage, m_ability.GetUser());
             }
         }
     }
