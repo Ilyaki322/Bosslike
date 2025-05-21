@@ -9,8 +9,12 @@ public class AbilityDataSO : ScriptableObject
 {
 	[field: SerializeReference] public List<AbilityData> AbilityDatas;
 
-	
-	public void AddData(AbilityData data)
+    private void OnEnable()
+    {
+        if (AbilityDatas == null) AbilityDatas = new List<AbilityData>();
+    }
+
+    public void AddData(AbilityData data)
 	{
         if (AbilityDatas.FirstOrDefault(t => t.GetType() == data.GetType()) != null)
             return;

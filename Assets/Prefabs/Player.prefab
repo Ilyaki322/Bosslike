@@ -800,9 +800,9 @@ MonoBehaviour:
   m_networkAnimator: {fileID: 107931053079759982}
   m_abilitiesData:
   - {fileID: 11400000, guid: 9d0c498ec75d68b418384e134fba74b2, type: 2}
-  m_abilities:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: fc06c09e51e438244bedf3de424a3995, type: 2}
   m_mousePosition: {x: 0, y: 0}
+  m_testProjectile: {fileID: 7983661663601266262, guid: 5f4d300701e3f624d9e021f8edeb42fe, type: 3}
 --- !u!114 &13207417603883056
 MonoBehaviour:
   m_ObjectHideFlags: 0

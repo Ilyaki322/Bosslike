@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd609f2326260674b8bbd07fa6768e5a, type: 3}
-  m_Name: Ability
+  m_Name: MeleeHit
   m_EditorClassIdentifier: 
   AbilityDatas:
   - rid: 2044379634224333003
@@ -24,7 +24,7 @@ MonoBehaviour:
         m_hitbox:
           serializedVersion: 2
           x: 1
-          y: 1
+          y: -0.5
           width: 1
           height: 1
         m_hitLayerMask:
