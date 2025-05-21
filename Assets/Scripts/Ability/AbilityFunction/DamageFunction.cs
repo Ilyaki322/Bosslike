@@ -5,16 +5,14 @@ public class DamageFunction : AbilityFunction
     [SerializeField] DamageData m_data;
     BoxHitFunction m_boxhit;
 
-    protected override void Start()
-    {
-        base.Start();
-        m_boxhit.OnDetected += dealDamage;
-    }
     protected override void Use() {}
 
-    protected override void Init()
+    public override void Init(AbilityData data)
     {
+        base.Init(data);
         m_boxhit = GetComponent<BoxHitFunction>();
+        m_boxhit.OnDetected += dealDamage;
+        m_data = data as DamageData;
     }
 
     void dealDamage(Collider2D[] targets)
@@ -23,7 +21,7 @@ public class DamageFunction : AbilityFunction
         {
             if(hit.TryGetComponent<Healthbar_Network>(out Healthbar_Network hb))
             {
-                hb.TakeDamage(5f, 0); // fix user hb.TakeDamage(5f, user);
+                hb.TakeDamage(m_data.Damage, 0); // fix user hb.TakeDamage(5f, user);
             }
         }
     }
