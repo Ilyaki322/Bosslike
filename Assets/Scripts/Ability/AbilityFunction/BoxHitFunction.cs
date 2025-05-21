@@ -15,7 +15,7 @@ public class BoxHitFunction : AbilityFunction
     public override void Init(AbilityData data)
     {
         base.Init(data);
-        m_movement = GetComponent<PlayerMovement_Network>();
+        m_movement = GetComponentInParent<PlayerMovement_Network>();
         m_data = data as BoxHitData;
     }
 

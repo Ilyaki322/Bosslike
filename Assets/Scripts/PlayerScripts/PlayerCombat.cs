@@ -12,7 +12,8 @@ public class PlayerCombat : NetworkBehaviour
     [SerializeField] Animator m_animator;
     [SerializeField] NetworkAnimator m_networkAnimator;
     [SerializeField] List<AbilityDataSO> m_abilitiesData;
-    [SerializeField] List<Ability> m_abilities;
+
+    List<Ability> m_abilities = new();
 
     [HideInInspector] public Vector2 m_mousePosition;
 
@@ -32,11 +33,15 @@ public class PlayerCombat : NetworkBehaviour
 
     private void initAbilities()
     {
-        foreach (var ability in m_abilitiesData)
+        for(int i = 0; i < m_abilitiesData.Count; i++)
         {
-            foreach (var data in ability.AbilityDatas)
+            var newObj = new GameObject($"Ability{i}");
+            newObj.transform.parent = transform;
+            m_abilities.Add(newObj.AddComponent<Ability>());
+            
+            foreach (var data in m_abilitiesData[i].AbilityDatas)
             {
-                var abilityComponent = gameObject.AddComponent(data.getFunction()) as AbilityFunction;
+                var abilityComponent = newObj.AddComponent(data.getFunction()) as AbilityFunction;
                 abilityComponent.Init(data);
             }
         }
@@ -49,7 +54,7 @@ public class PlayerCombat : NetworkBehaviour
 
     public void UseAbility(int i, Vector3 mousePos)
     {
-        m_mousePosition = new Vector2(mousePos.x, mousePos.y);
+        m_mousePosition = (Vector2)mousePos;
 
         if (m_abilities.Count <= i)
         {
