@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class AbilityData
+public abstract class AbilityData
 {
+    public abstract Type getFunction();
 }

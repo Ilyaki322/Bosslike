@@ -5,4 +5,9 @@ using UnityEngine;
 public class DamageData : AbilityData
 {
     [field: SerializeField] public int Damage { get; private set; }
+
+    public override Type getFunction()
+    {
+        return typeof(DamageFunction);
+    }
 }

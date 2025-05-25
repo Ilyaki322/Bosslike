@@ -10,23 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd609f2326260674b8bbd07fa6768e5a, type: 3}
-  m_Name: Ability
+  m_Name: TestProjectile
   m_EditorClassIdentifier: 
-  Abilities:
-  - rid: 2044379471976071263
+  AbilityDatas:
+  - rid: 2044379634224333057
   references:
     version: 2
     RefIds:
-    - rid: 2044379471976071263
-      type: {class: BoxHitData, ns: , asm: Assembly-CSharp}
+    - rid: 2044379634224333057
+      type: {class: ProjectileData, ns: , asm: Assembly-CSharp}
       data:
-        m_hitbox:
-          serializedVersion: 2
-          x: 0
-          y: 0
-          width: 0
-          height: 0
-        m_hitLayerMask:
-          serializedVersion: 2
-          m_Bits: 0
-        m_debug: 0
+        m_projectile: {fileID: 7983661663601266262, guid: 5f4d300701e3f624d9e021f8edeb42fe, type: 3}

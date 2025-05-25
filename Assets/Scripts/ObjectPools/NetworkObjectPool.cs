@@ -18,6 +18,9 @@ public class NetworkObjectPool : MonoBehaviour
 
     [SerializeField] List<PoolConfigObject> m_pooledPrefabList;
 
+    Dictionary<int, GameObject> m_indexToPrefab = new();
+    Dictionary<GameObject, int> m_prefabToIndex = new();
+
     HashSet<GameObject> m_prefabs = new HashSet<GameObject>();
     Dictionary<GameObject, Queue<NetworkObject>> m_pooledObjects = new Dictionary<GameObject, Queue<NetworkObject>>();
 
@@ -37,6 +40,10 @@ public class NetworkObjectPool : MonoBehaviour
 
     private void RegisterPrefabInternal(GameObject prefab, int prewarmCount)
     {
+        int index = m_indexToPrefab.Count;
+        m_indexToPrefab[index] = prefab;
+        m_prefabToIndex[prefab] = index;
+
         m_prefabs.Add(prefab);
 
         var prefabQueue = new Queue<NetworkObject>();
@@ -50,6 +57,16 @@ public class NetworkObjectPool : MonoBehaviour
 
         // Register Netcode Spawn handlers
         m_networkManager.PrefabHandler.AddHandler(prefab, new DummyPrefabInstanceHandler(prefab, this));
+    }
+
+    public int GetPrefabIndex(GameObject prefab)
+    {
+        return m_prefabToIndex.TryGetValue(prefab, out var index) ? index : -1;
+    }
+
+    public GameObject GetPrefabByIndex(int index)
+    {
+        return m_indexToPrefab.TryGetValue(index, out var prefab) ? prefab : null;
     }
 
     public void ReturnNetworkObject(NetworkObject networkObject, GameObject prefab)

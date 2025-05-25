@@ -5,18 +5,13 @@ public abstract class AbilityFunction : NetworkBehaviour
 {
     [SerializeField] protected Ability m_ability;
 
-    protected virtual void Awake()
+    protected abstract void Use();
+
+    public virtual void Init(AbilityData d)
     {
         m_ability = GetComponent<Ability>();
-    }
-
-    protected virtual void Start()
-    {
         m_ability.OnUse += Use;
     }
-
-    protected abstract void Use();
-    protected abstract void Init();
 
     public override void OnDestroy()
     {
