@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 107931053079759982}
   - component: {fileID: 8179031024883478737}
   - component: {fileID: 930234122460922719}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 8993046564015547609}
   - component: {fileID: 174284225512068460}
   - component: {fileID: 4741877550069422286}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -340,7 +340,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6823406943833822476}
   - component: {fileID: 518527830469608555}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Nabut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -427,7 +427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1238983447051037344}
   - component: {fileID: 1638554713319340636}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Forward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,9 +524,9 @@ GameObject:
   - component: {fileID: 3671899376744937596}
   - component: {fileID: -6184401918218680807}
   - component: {fileID: 13207417603883056}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -802,7 +802,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9d0c498ec75d68b418384e134fba74b2, type: 2}
   - {fileID: 11400000, guid: fc06c09e51e438244bedf3de424a3995, type: 2}
   m_mousePosition: {x: 0, y: 0}
-  m_testProjectile: {fileID: 7983661663601266262, guid: 5f4d300701e3f624d9e021f8edeb42fe, type: 3}
 --- !u!114 &13207417603883056
 MonoBehaviour:
   m_ObjectHideFlags: 0
