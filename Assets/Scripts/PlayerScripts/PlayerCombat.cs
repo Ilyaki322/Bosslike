@@ -29,6 +29,13 @@ public class PlayerCombat : NetworkBehaviour
         m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
         if (!IsOwner) return;
         initAbilities();
+        initUI();
+    }
+
+    private void initUI()
+    {
+        var bar = GetComponentInChildren<AbilityBar>();
+        bar.Generate(m_abilitiesData);
     }
 
     private void initAbilities()

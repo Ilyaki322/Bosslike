@@ -8,6 +8,7 @@ using UnityEngine;
 public class AbilityDataSO : ScriptableObject
 {
 	[field: SerializeReference] public List<AbilityData> AbilityDatas;
+    [SerializeField] public Sprite AbilityIcon;
 
     private void OnEnable()
     {

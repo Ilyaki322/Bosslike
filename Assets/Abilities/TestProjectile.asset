@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityDatas:
   - rid: 2044379634224333057
+  AbilityIcon: {fileID: -4005064159405011688, guid: 7ce4f10557469f54fb370500037d0db4, type: 3}
   references:
     version: 2
     RefIds:
