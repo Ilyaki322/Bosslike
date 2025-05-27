@@ -15,6 +15,18 @@ public class AbilityBar : MonoBehaviour
 
     private VisualElement m_container;
 
+    public void ProgressCooldown(float time)
+    {
+        foreach (var box in m_boxList)
+        {
+            box.Cooldown(time);
+        }
+    }
+
+    public void SetCooldown(int abilityIndex)
+    {
+        m_boxList[abilityIndex].setCooldown();
+    }
 
     public void Generate(List<AbilityDataSO> abilityList)
     {
@@ -35,7 +47,7 @@ public class AbilityBar : MonoBehaviour
 
         for (int i = 0; i < abilityList.Count; i++)
         {
-            var t = new AbilityBox(abilityList[i].AbilityIcon, m_frame);
+            var t = new AbilityBox(abilityList[i].AbilityIcon, m_frame, abilityList[i].AbilityCooldown);
             m_boxList.Add(t);
             t.AddClass("box");
             grid.Add(t);

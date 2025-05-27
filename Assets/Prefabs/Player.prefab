@@ -869,8 +869,6 @@ MonoBehaviour:
   m_abilitiesData:
   - {fileID: 11400000, guid: 9d0c498ec75d68b418384e134fba74b2, type: 2}
   - {fileID: 11400000, guid: fc06c09e51e438244bedf3de424a3995, type: 2}
-  - {fileID: 11400000, guid: fc06c09e51e438244bedf3de424a3995, type: 2}
-  - {fileID: 11400000, guid: fc06c09e51e438244bedf3de424a3995, type: 2}
   m_mousePosition: {x: 0, y: 0}
 --- !u!114 &13207417603883056
 MonoBehaviour:

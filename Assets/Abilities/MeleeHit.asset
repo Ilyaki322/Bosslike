@@ -16,6 +16,7 @@ MonoBehaviour:
   - rid: 2044379634224333003
   - rid: 2044379634224333004
   AbilityIcon: {fileID: 5809742885717775979, guid: 8db4f7e20c8810d488b1207219e98bd2, type: 3}
+  AbilityCooldown: 2
   references:
     version: 2
     RefIds:
@@ -24,10 +25,10 @@ MonoBehaviour:
       data:
         m_hitbox:
           serializedVersion: 2
-          x: 1.8
-          y: -0.16
-          width: 2.62
-          height: 2.46
+          x: 1
+          y: -0.5
+          width: 1
+          height: 1
         m_hitLayerMask:
           serializedVersion: 2
           m_Bits: 1

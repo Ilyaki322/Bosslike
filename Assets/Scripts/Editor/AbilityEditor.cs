@@ -25,7 +25,7 @@ public class AbilityEditor : Editor
     {
         base.OnInspectorGUI();
 
-
+        GUILayout.Space(10);
         m_showAddComponentButtons = EditorGUILayout.Foldout(m_showAddComponentButtons, "Add Components");
 
         if (m_showAddComponentButtons)
