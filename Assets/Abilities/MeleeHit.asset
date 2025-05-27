@@ -15,6 +15,8 @@ MonoBehaviour:
   AbilityDatas:
   - rid: 2044379634224333003
   - rid: 2044379634224333004
+  AbilityIcon: {fileID: 5809742885717775979, guid: 8db4f7e20c8810d488b1207219e98bd2, type: 3}
+  AbilityCooldown: 2
   references:
     version: 2
     RefIds:

@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -14,6 +13,7 @@ public class PlayerCombat : NetworkBehaviour
     [SerializeField] List<AbilityDataSO> m_abilitiesData;
 
     List<Ability> m_abilities = new();
+    AbilityBar m_abilityBarUI;
 
     [HideInInspector] public Vector2 m_mousePosition;
 
@@ -24,20 +24,46 @@ public class PlayerCombat : NetworkBehaviour
     //    initAbilities();
     //}
 
+    private void Update()
+    {
+        if (!IsOwner) return;
+        progressCooldown(Time.deltaTime);
+        m_abilityBarUI.ProgressCooldown(Time.deltaTime);
+    }
+
+    private void progressCooldown(float time)
+    {
+        foreach (var ability in m_abilities)
+        {
+            ability.Cooldown(time);
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
         m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
         if (!IsOwner) return;
         initAbilities();
+        initUI();
     }
 
+    private void initUI()
+    {
+        m_abilityBarUI = GetComponentInChildren<AbilityBar>();
+        m_abilityBarUI.Generate(m_abilitiesData);
+    }
+
+    
     private void initAbilities()
     {
         for(int i = 0; i < m_abilitiesData.Count; i++)
         {
             var newObj = new GameObject($"Ability{i}");
             newObj.transform.parent = transform;
-            m_abilities.Add(newObj.AddComponent<Ability>());
+
+            var ability = newObj.AddComponent<Ability>();
+            ability.Init(NetworkManager.Singleton.LocalClientId, m_abilitiesData[i].AbilityCooldown);
+            m_abilities.Add(ability);
             
             foreach (var data in m_abilitiesData[i].AbilityDatas)
             {
@@ -95,7 +121,8 @@ public class PlayerCombat : NetworkBehaviour
         }
 
         //UseAbilityServerRpc(new Vector2(mousePos.x, mousePos.y), i, NetworkManager.Singleton.LocalClientId);
-        m_abilities[i].Use(NetworkManager.Singleton.LocalClientId);
+        m_abilities[i].Use(m_abilityBarUI, i);
+        
     }
 
     //[Rpc(SendTo.Server)]
@@ -104,6 +131,4 @@ public class PlayerCombat : NetworkBehaviour
     //    m_mousePosition = mousePos;
     //    m_abilities[i].Use(this, user);
     //}
-
-    // Manage Ability Cooldown
 }
