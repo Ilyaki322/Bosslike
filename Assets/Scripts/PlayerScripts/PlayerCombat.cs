@@ -17,13 +17,6 @@ public class PlayerCombat : NetworkBehaviour
 
     [HideInInspector] public Vector2 m_mousePosition;
 
-    //public void Awake()
-    //{
-    //    if (!IsOwner) return;
-    //    m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
-    //    initAbilities();
-    //}
-
     private void Update()
     {
         if (!IsOwner) return;
@@ -53,7 +46,6 @@ public class PlayerCombat : NetworkBehaviour
         m_abilityBarUI.Generate(m_abilitiesData);
     }
 
-    
     private void initAbilities()
     {
         for(int i = 0; i < m_abilitiesData.Count; i++)
@@ -92,22 +84,16 @@ public class PlayerCombat : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void UseProjectileRpc(Vector3 spawn, Vector2 target, int projectileIndex, ulong user)
     {
+        var playerObject = NetworkManager.ConnectedClients[user].PlayerObject;
+        if (playerObject == null) return;
+        Vector3 sspawn = playerObject.transform.position;
+
         GameObject prefab = m_objectPool.GetPrefabByIndex(projectileIndex);
-
-        var go = m_objectPool.GetNetworkObject(prefab);
-        go.transform.position = spawn;
-        Vector2 direction = (target - (Vector2)spawn).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        go.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        var rb = go.GetComponent<Rigidbody2D>();
-        Vector2 velocity = direction * 10f;
-
+        var go = m_objectPool.GetNetworkObject(prefab, sspawn, Quaternion.identity);
         go.GetComponent<NetworkObject>().Spawn(true);
 
-        var tp = go.GetComponent<TestProjectile>();
-        tp.Config(this, 3f, user);
-        tp.SetVelocity(velocity);
+        var tp = go.GetComponent<Projectile>();
+        tp.Config(user, sspawn, target);
     }
 
     public void UseAbility(int i, Vector3 mousePos)
@@ -120,15 +106,6 @@ public class PlayerCombat : NetworkBehaviour
             return;
         }
 
-        //UseAbilityServerRpc(new Vector2(mousePos.x, mousePos.y), i, NetworkManager.Singleton.LocalClientId);
         m_abilities[i].Use(m_abilityBarUI, i);
-        
     }
-
-    //[Rpc(SendTo.Server)]
-    //private void UseAbilityServerRpc(Vector2 mousePos, int i, ulong user)
-    //{
-    //    m_mousePosition = mousePos;
-    //    m_abilities[i].Use(this, user);
-    //}
 }
