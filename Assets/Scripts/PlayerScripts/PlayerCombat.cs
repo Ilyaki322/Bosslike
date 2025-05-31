@@ -46,6 +46,7 @@ public class PlayerCombat : NetworkBehaviour
         m_abilityBarUI.Generate(m_abilitiesData);
     }
 
+    // TODO: add all components --> only then init all.
     private void initAbilities()
     {
         for(int i = 0; i < m_abilitiesData.Count; i++)

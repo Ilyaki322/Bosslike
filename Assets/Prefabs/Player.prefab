@@ -691,6 +691,7 @@ MonoBehaviour:
   m_animator: {fileID: 8179031024883478737}
   m_networkAnimator: {fileID: 107931053079759982}
   m_abilitiesData:
+  - {fileID: 11400000, guid: 1d6d6e4f4f7909244bfa5bb413ddec81, type: 2}
   - {fileID: 11400000, guid: f44ae27f1edb9e84da018f404c769a0b, type: 2}
   - {fileID: 11400000, guid: ca5231b47c3926c4097652d40af49fed, type: 2}
   m_mousePosition: {x: 0, y: 0}

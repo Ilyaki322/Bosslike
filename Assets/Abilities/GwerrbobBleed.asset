@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd609f2326260674b8bbd07fa6768e5a, type: 3}
+  m_Name: GwerrbobBleed
+  m_EditorClassIdentifier: 
+  AbilityDatas:
+  - rid: 2044379858495340662
+  - rid: 2044379858495340663
+  AbilityIcon: {fileID: -6995123011722499173, guid: 64277330dbf8b5a48b870f2ad772f948, type: 3}
+  AbilityCooldown: 3
+  references:
+    version: 2
+    RefIds:
+    - rid: 2044379858495340662
+      type: {class: BoxHitData, ns: , asm: Assembly-CSharp}
+      data:
+        m_hitbox:
+          serializedVersion: 2
+          x: 1
+          y: -0.5
+          width: 1
+          height: 1
+        m_hitLayerMask:
+          serializedVersion: 2
+          m_Bits: 1
+        m_debug: 1
+    - rid: 2044379858495340663
+      type: {class: ApplyEffectData, ns: , asm: Assembly-CSharp}
+      data:
+        Effect: {fileID: 11400000, guid: b52ecab9d24c07b43bfef54da10bd55b, type: 2}
