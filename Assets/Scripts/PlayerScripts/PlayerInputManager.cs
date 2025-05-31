@@ -26,4 +26,9 @@ public class PlayerInputManager : MonoBehaviour
     {
         m_playerCombat.UseAbility(1, m_playerCam.ScreenToWorldPoint(Input.mousePosition));
     }
+
+    public void OnThirdAttack()
+    {
+        m_playerCombat.UseAbility(2, m_playerCam.ScreenToWorldPoint(Input.mousePosition));
+    }
 }
