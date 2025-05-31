@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd609f2326260674b8bbd07fa6768e5a, type: 3}
-  m_Name: TestProjectile
+  m_Name: GwerrbobEye
   m_EditorClassIdentifier: 
   AbilityDatas:
-  - rid: 2044379634224333057
-  AbilityIcon: {fileID: -4005064159405011688, guid: 7ce4f10557469f54fb370500037d0db4, type: 3}
-  AbilityCooldown: 2
+  - rid: 2044379796359348393
+  AbilityIcon: {fileID: 4950415919908175610, guid: c579f8f76aeb6e14194fc97eae076cd1, type: 3}
+  AbilityCooldown: 5
   references:
     version: 2
     RefIds:
-    - rid: 2044379634224333057
+    - rid: 2044379796359348393
       type: {class: ProjectileData, ns: , asm: Assembly-CSharp}
       data:
-        m_projectile: {fileID: 7983661663601266262, guid: 5f4d300701e3f624d9e021f8edeb42fe, type: 3}
+        m_projectile: {fileID: 8024128060886365318, guid: ec780e44cd53c4e46a3849e7150f292e, type: 3}

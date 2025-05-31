@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd609f2326260674b8bbd07fa6768e5a, type: 3}
+  m_Name: GwerrbobKnock
+  m_EditorClassIdentifier: 
+  AbilityDatas:
+  - rid: 2044379796359348473
+  - rid: 2044379796359348474
+  AbilityIcon: {fileID: 1015121567026328760, guid: 293372669cb322343b42233f7f367947, type: 3}
+  AbilityCooldown: 5
+  references:
+    version: 2
+    RefIds:
+    - rid: 2044379796359348473
+      type: {class: BoxHitData, ns: , asm: Assembly-CSharp}
+      data:
+        m_hitbox:
+          serializedVersion: 2
+          x: -2.5
+          y: -2.5
+          width: 5
+          height: 5
+        m_hitLayerMask:
+          serializedVersion: 2
+          m_Bits: 1
+        m_debug: 1
+    - rid: 2044379796359348474
+      type: {class: KnockData, ns: , asm: Assembly-CSharp}
+      data:
+        <Force>k__BackingField: 10
