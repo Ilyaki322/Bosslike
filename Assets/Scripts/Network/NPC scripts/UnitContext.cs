@@ -9,7 +9,7 @@ public class UnitContext : NetworkBehaviour
 
     private Transform m_transform;
     private UnitController m_controller;
-    public readonly NetworkVariable<int> m_currHealth = new NetworkVariable<int>();
+    [HideInInspector] public readonly NetworkVariable<int> m_currHealth = new NetworkVariable<int>();
 
     private void Awake()
     {

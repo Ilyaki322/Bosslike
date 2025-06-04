@@ -30,25 +30,11 @@ public class Healthbar_Network : NetworkBehaviour
         m_currHP.OnValueChanged += OnHealthChanged;
     }
 
-    //public void TakeDamage(float damage)
-    //{
-    //    TakeDamageServerRpc(damage);  
-    //}
-
     public void TakeDamage(float damage, ulong user)
     {
         TakeDamageServerRpc(damage, user);
     }
 
-    //[Rpc(SendTo.Server)]
-    //public void TakeDamageServerRpc(float damage)
-    //{
-    //    m_currHP.Value -= damage;
-
-    //    var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
-    //    popup.GetComponent<NetworkObject>().Spawn(true);
-    //    popup.GetComponent<DamagePopup>().Config(1f, transform.position, damage);
-    //}
     [Rpc(SendTo.Server)]
     public void TakeDamageServerRpc(float damage, ulong attackerID)
     {
@@ -63,4 +49,20 @@ public class Healthbar_Network : NetworkBehaviour
     {
         m_hpbar.value = newValue;
     }
+
+
+
+#region trash
+
+    //[Rpc(SendTo.Server)]
+    //public void TakeDamageServerRpc(float damage)
+    //{
+    //    m_currHP.Value -= damage;
+
+    //    var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
+    //    popup.GetComponent<NetworkObject>().Spawn(true);
+    //    popup.GetComponent<DamagePopup>().Config(1f, transform.position, damage);
+    //}
+
+#endregion
 }
