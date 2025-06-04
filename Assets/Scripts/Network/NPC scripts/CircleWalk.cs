@@ -26,7 +26,7 @@ public class CircleWalk : ICommand
 
     public void Enter(UnitContext ctx)
     {
-        m_moveSpeed = ctx.moveSpeed;
+        m_moveSpeed = ctx.MoveSpeed;
         // set the starting angle so you don't snap
         Vector2 offset = (Vector2)ctx.Transform.position
                        - (Vector2)m_center;
@@ -58,7 +58,7 @@ public class CircleWalk : ICommand
         }
         else
         {
-            ctx.Controller.EnqueueCommand(new MoveToClosest());
+            ctx.Controller.PushCommand(new MoveToClosest(), true);
             return true;
         }
     }

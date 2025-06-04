@@ -11,7 +11,7 @@ public class PlayerInputManager : MonoBehaviour
     [SerializeField] Camera m_playerCam;
 
     [HideInInspector] public Vector2 moveUpdate;
-
+    Camera Camera => m_playerCam;
     public void OnMove(InputValue context)
     {
         moveUpdate = context.Get<Vector2>();

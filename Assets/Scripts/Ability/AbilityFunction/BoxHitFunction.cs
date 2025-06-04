@@ -10,12 +10,12 @@ public class BoxHitFunction : AbilityFunction
     Collider2D[] m_detected;
     Vector2 m_offset;
 
-    PlayerMovement_Network m_movement;
+    UnitController m_movement;
 
     public override void Init(AbilityData data)
     {
         base.Init(data);
-        m_movement = GetComponentInParent<PlayerMovement_Network>();
+        m_movement = GetComponentInParent<UnitController>();
         m_data = data as BoxHitData;
     }
 

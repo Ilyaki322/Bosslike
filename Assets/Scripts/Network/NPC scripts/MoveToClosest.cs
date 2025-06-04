@@ -18,14 +18,9 @@ public class MoveToClosest : ICommand
     private const float CollisionRadius = 1f;
     private static readonly LayerMask PlayerLayer = LayerMask.GetMask("Player");
 
-    public MoveToClosest()
-    {
-        // Speed is provided via UnitContext
-    }
-
     public void Enter(UnitContext ctx)
     {
-        m_speed = ctx.moveSpeed;
+        m_speed = ctx.MoveSpeed;
         m_transform = ctx.Transform;
         CacheGroundTilemap();
         LocateNearestPlayer(ctx);
@@ -131,8 +126,8 @@ public class MoveToClosest : ICommand
         float angularSpeed = Mathf.PI / 4f;
         float duration = 5f;
         Vector3 center = m_transform.position - new Vector3(radius, 0f, 0f);
-        ctx.Controller.EnqueueCommand(
-            new CircleWalk(center, radius, angularSpeed, duration));
+        ctx.Controller.PushCommand(
+            new CircleWalk(center, radius, angularSpeed, duration), true);
     }
 
     // --- A* Pathfinding with diagonals (Octile distance) ---
