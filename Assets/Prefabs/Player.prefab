@@ -563,6 +563,7 @@ GameObject:
   - component: {fileID: 13207417603883056}
   - component: {fileID: -3519782816826179843}
   - component: {fileID: -1415410218870666780}
+  - component: {fileID: 6138070477116449897}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -802,7 +803,7 @@ MonoBehaviour:
   m_animator: {fileID: 8179031024883478737}
   m_networkAnimator: {fileID: 107931053079759982}
   m_abilitiesData:
-  - {fileID: 11400000, guid: 0856adc2873599f49a4af85490ea9221, type: 2}
+  - {fileID: 11400000, guid: 1d6d6e4f4f7909244bfa5bb413ddec81, type: 2}
   - {fileID: 11400000, guid: f44ae27f1edb9e84da018f404c769a0b, type: 2}
   - {fileID: 11400000, guid: ca5231b47c3926c4097652d40af49fed, type: 2}
   m_mousePosition: {x: 0, y: 0}
@@ -848,3 +849,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_cam: {fileID: 8993046564015547609}
+--- !u!114 &6138070477116449897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8877230402697404518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da2ce65d356dc3c49968b7f8f9174af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  m_movement: {fileID: -1415410218870666780}
+  m_input: {fileID: 4484604091268177873}
+  m_camera: {fileID: 8993046564015547609}
+  m_combat: {fileID: -6184401918218680807}
+  m_pim: {fileID: 3671899376744937596}
+  m_rb: {fileID: -2183317777147763284}
+  m_animController: {fileID: 930234122460922719}
+  m_uc: {fileID: -3519782816826179843}

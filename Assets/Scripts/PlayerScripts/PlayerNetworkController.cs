@@ -9,13 +9,14 @@ using UnityEngine.InputSystem;
  */
 public class PlayerNetworkController : NetworkBehaviour
 {
-    [SerializeField] private PlayerMovement_Network m_movement;
+    [SerializeField] private UnitController m_movement;
     [SerializeField] private PlayerInput m_input;
     [SerializeField] private Camera m_camera;
     [SerializeField] private PlayerCombat m_combat;
     [SerializeField] private PlayerInputManager m_pim;
     [SerializeField] private Rigidbody2D m_rb;
     [SerializeField] private AnimationController m_animController;
+    [SerializeField] private UnitContext m_uc;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class PlayerNetworkController : NetworkBehaviour
         m_combat.enabled = false;
         m_pim.enabled = false;
         m_animController.enabled = false;
+        m_uc.enabled = false;
     }
     public override void OnNetworkSpawn()
     {
@@ -37,7 +39,8 @@ public class PlayerNetworkController : NetworkBehaviour
             m_camera.enabled = true;
             m_combat.enabled = true;
             m_pim.enabled = true;
-            m_animController.enabled = true;    
+            m_animController.enabled = true;
+            m_uc.enabled = true;
 
             m_camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }

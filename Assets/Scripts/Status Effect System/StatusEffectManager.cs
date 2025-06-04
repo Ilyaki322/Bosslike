@@ -4,26 +4,34 @@ using UnityEngine;
 
 public class StatusEffectManager : MonoBehaviour
 {
-    private readonly Dictionary<StatusEffectSO, TimedEffect> m_effects = new();
+    //private readonly Dictionary<StatusEffectSO, TimedEffect> m_effects = new();
+    private readonly Dictionary<ulong, Dictionary<StatusEffectSO, TimedEffect>> m_userToDict = new();
 
     private void Update()
     {
-        foreach (var effect in m_effects.Values.ToList())
+        foreach (var dict in m_userToDict.Values.ToList())
+        foreach (var effect in dict.Values.ToList())
         {
             effect.Tick(Time.deltaTime);
-            if (effect.IsFinished) m_effects.Remove(effect.Buff);
+            if (effect.IsFinished) dict.Remove(effect.Buff);
         }
     }
 
     public void AddEffect(TimedEffect effect)
     {
-        if (m_effects.ContainsKey(effect.Buff))
+        if (!m_userToDict.ContainsKey(effect.UserID))
         {
-            m_effects[effect.Buff].Activate();
+            m_userToDict[effect.UserID] = new();
+        }
+
+        var dict = m_userToDict[effect.UserID];
+        if (dict.ContainsKey(effect.Buff))
+        {
+            dict[effect.Buff].Activate();
         }
         else
         {
-            m_effects.Add(effect.Buff, effect);
+            dict.Add(effect.Buff, effect);
             effect.Activate();
         }
     }

@@ -21,7 +21,7 @@ public class ApplyEffectFunction : AbilityFunction
         {
             if (hit.TryGetComponent<StatusEffectManager>(out StatusEffectManager em))
             {
-                em.AddEffect(m_data.Effect.Init(hit.gameObject));
+                em.AddEffect(m_data.Effect.Init(hit.gameObject, m_ability.GetUser()));
             }
         }
     }

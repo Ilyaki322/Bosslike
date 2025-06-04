@@ -12,10 +12,13 @@ public abstract class TimedEffect
     protected readonly GameObject Obj;
     public bool IsFinished;
 
-    public TimedEffect(StatusEffectSO buff, GameObject obj)
+    public ulong UserID { get; private set; }
+
+    public TimedEffect(StatusEffectSO buff, GameObject obj, ulong u)
     {
         Buff = buff;
         Obj = obj;
+        UserID = u;
     }
 
     public void Tick(float delta)

@@ -6,8 +6,8 @@ public class DotEffect : StatusEffectSO
     public int DamagePerTick;
     public float Tick;
 
-    public override TimedEffect Init(GameObject obj)
+    public override TimedEffect Init(GameObject obj, ulong u)
     {
-        return new TimedDotEffect(this, obj);
+        return new TimedDotEffect(this, obj, u);
     }
 }

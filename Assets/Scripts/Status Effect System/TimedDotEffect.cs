@@ -6,7 +6,7 @@ public class TimedDotEffect : TimedEffect
 
     DotEffect m_data;
 
-    public TimedDotEffect(DotEffect buff, GameObject obj) : base(buff, obj)
+    public TimedDotEffect(DotEffect buff, GameObject obj, ulong u) : base(buff, obj, u)
     {
         m_data = buff;
         m_hpBar = obj.GetComponent<Healthbar_Network>();
@@ -18,6 +18,6 @@ public class TimedDotEffect : TimedEffect
 
     protected override void ApplyTick()
     {
-        m_hpBar.TakeDamage(m_data.DamagePerTick, 0);
+        m_hpBar.TakeDamage(m_data.DamagePerTick, UserID);
     }
 }
