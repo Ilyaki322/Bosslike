@@ -17,6 +17,8 @@ public class PlayerCombat : NetworkBehaviour
 
     [HideInInspector] public Vector2 m_mousePosition;
 
+    AnimationController m_animController;
+
     private void Update()
     {
         if (!IsOwner) return;
@@ -36,6 +38,7 @@ public class PlayerCombat : NetworkBehaviour
     {
         m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
         if (!IsOwner) return;
+        m_animController = GetComponentInChildren<AnimationController>();
         initAbilities();
         initUI();
     }
@@ -107,6 +110,7 @@ public class PlayerCombat : NetworkBehaviour
             return;
         }
 
+        m_animController.setAbilityBool(true);
         m_abilities[i].Use(m_abilityBarUI, i);
     }
 }
