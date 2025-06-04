@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -14,12 +15,17 @@ public class MoveToClosest : ICommand
     private List<Vector3> m_path;
     private int m_currentIndex;
 
+    private static PlayerLocator s_playerLocator;
+
     // Collision settings
     private const float CollisionRadius = 1f;
     private static readonly LayerMask PlayerLayer = LayerMask.GetMask("Player");
 
     public void Enter(UnitContext ctx)
     {
+        Debug.Log("[MoveToClosest] Entering command.");
+        if(s_playerLocator == null)
+            s_playerLocator = NetworkManager.Singleton.GetComponent<PlayerLocator>();
         m_speed = ctx.MoveSpeed;
         m_transform = ctx.Transform;
         CacheGroundTilemap();
@@ -29,13 +35,19 @@ public class MoveToClosest : ICommand
 
     public bool Execute(UnitContext ctx, float deltaTime)
     {
-        // Collision detection
         if (Physics2D.OverlapCircle(m_transform.position, CollisionRadius, PlayerLayer) is Collider2D hit
             && hit.CompareTag("Player"))
         {
             EnqueueCircleWalk(ctx);
             return true;
         }
+
+        if (m_target == null || m_path.Count == 0)
+        {
+            return true;
+        }
+
+
         MoveTowardsTarget(deltaTime);
         return false;
     }
@@ -61,10 +73,9 @@ public class MoveToClosest : ICommand
 
     private void LocateNearestPlayer(UnitContext ctx)
     {
-        var players = ctx.PlayerLocator.GetPlayers();
         m_target = null;
         float bestDist = float.MaxValue;
-        foreach (var p in players)
+        foreach (var p in s_playerLocator.GetPlayers())
         {
             float d = Vector2.Distance((Vector2)m_transform.position, (Vector2)p.position);
             if (d < bestDist)
@@ -84,6 +95,10 @@ public class MoveToClosest : ICommand
             Vector3Int start = s_ground.WorldToCell(m_transform.position);
             Vector3Int goal = s_ground.WorldToCell(m_target.position);
             m_path = FindPath(start, goal);
+        }
+        else
+        {
+            m_path = new List<Vector3>();
         }
     }
 
@@ -126,8 +141,7 @@ public class MoveToClosest : ICommand
         float angularSpeed = Mathf.PI / 4f;
         float duration = 5f;
         Vector3 center = m_transform.position - new Vector3(radius, 0f, 0f);
-        ctx.Controller.PushCommand(
-            new CircleWalk(center, radius, angularSpeed, duration), true);
+        ctx.Controller.PushCommand(new CircleWalk(center, radius, angularSpeed, duration), true);
     }
 
     // --- A* Pathfinding with diagonals (Octile distance) ---

@@ -63,33 +63,19 @@ public abstract class UnitController : NetworkBehaviour
     {
         if (m_current == null) return;
 
-        if (m_current.Command.Execute(m_ctx, Time.deltaTime))
+        if (!m_current.Command.Execute(m_ctx, Time.deltaTime)) return;
+
+        m_current.Command.Exit(m_ctx);
+
+        if (m_current.RemoveOnExit)
         {
-            m_current.Command.Exit(m_ctx);
-
-            if (m_current.RemoveOnExit)
-            {
-                m_commands.RemoveAt(m_commands.Count - 1);
-            }
-            else
-            {
-                m_current.HasEntered = false;
-            }
-
-            m_current = null;
+            m_commands.Remove(m_current);
         }
-    }
-
-    protected void executeCommand()
-    {
-        if (m_current != null)
+        else
         {
-            float deltaTime = Time.deltaTime;
-            if (m_current.Command.Execute(m_ctx, deltaTime))
-            {
-                m_current.Command.Exit(m_ctx);
-                m_current = null;
-            }
+            m_current.HasEntered = false;
         }
+
+        m_current = null;
     }
 }

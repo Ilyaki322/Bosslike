@@ -15,8 +15,6 @@ public class BossUnitController : UnitController
             return;
         }
 
-        var locator = NetworkManager.Singleton.GetComponent<PlayerLocator>();
-        m_ctx.PlayerLocator = locator;
         m_prevPos = m_ctx.transform.position;
         var center = (Vector2)transform.position;
         PushCommand(new CircleWalk(center, 3f, Mathf.PI / 4f), true);
@@ -27,7 +25,7 @@ public class BossUnitController : UnitController
         Vector2 currentPos = m_ctx.transform.position;
         Vector2 delta = currentPos - m_prevPos;
 
-        if (delta.sqrMagnitude > 0.01f)
+        if (delta.sqrMagnitude > 0.00001f)
         {
             m_moveDirection = delta.normalized;
         }
@@ -37,16 +35,18 @@ public class BossUnitController : UnitController
 
     public override float GetRotationAngle()
     {
-        if(m_moveDirection.sqrMagnitude > 0.01f)
+        if(m_moveDirection.sqrMagnitude > 0.00001f)
+        {
             return Mathf.Atan2(m_moveDirection.y, m_moveDirection.x) * Mathf.Rad2Deg;
+        }
         
         return 0f;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!IsServer) return;
         StepCommands();
-        executeCommand();
+        calculatePositions();
     }
 }

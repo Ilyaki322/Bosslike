@@ -6,8 +6,6 @@ using UnityEngine;
 public class AnimationController : NetworkBehaviour
 {
     UnitController m_movement;
-
-    PlayerMovement_Network m_movement;
     NetworkAnimator m_animator;
 
     int m_abilityTrigger;

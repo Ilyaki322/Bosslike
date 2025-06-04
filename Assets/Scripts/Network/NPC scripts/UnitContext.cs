@@ -9,14 +9,12 @@ public class UnitContext : NetworkBehaviour
 
     private Transform m_transform;
     private UnitController m_controller;
-    private IPlayerLocator m_playerLocator;
     public readonly NetworkVariable<int> m_currHealth = new NetworkVariable<int>();
 
     private void Awake()
     {
         m_transform = GetComponent<Transform>();
         m_controller = GetComponent<UnitController>();
-        m_playerLocator = null;
     }
 
     public override void OnNetworkSpawn()
@@ -28,9 +26,6 @@ public class UnitContext : NetworkBehaviour
     public Transform Transform { get { return m_transform; } }
     public float MoveSpeed { get { return m_moveSpeed; } set { m_moveSpeed = value; } }
     public UnitController Controller { get { return m_controller;} }
-
-    //Used by AI to locate all players
-    public IPlayerLocator PlayerLocator { set { m_playerLocator = value; } get { return m_playerLocator; } }
 
     [ServerRpc]
     private void setHealthServerRpc(int health)

@@ -25,9 +25,8 @@ public class PlayerUnitController : UnitController
         PushCommand(new PlayerMovementCommand(), false);
     }
 
-    void Update()
+    private void FixedUpdate()
     {
         StepCommands();
-        executeCommand();
     }
 }

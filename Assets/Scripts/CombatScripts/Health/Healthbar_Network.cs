@@ -8,11 +8,11 @@ using Slider = UnityEngine.UI.Slider;
 
 public class Healthbar_Network : NetworkBehaviour
 {
-    [SerializeField] float m_maxHP = 100f;
     [SerializeField] Slider m_hpbar;
 
     [SerializeField] GameObject m_dmgPopup;
     NetworkObjectPool m_objectPool;
+    private UnitContext m_ctx;
 
     NetworkVariable<float> m_currHP = new NetworkVariable<float>();
 
@@ -20,11 +20,11 @@ public class Healthbar_Network : NetworkBehaviour
     {
         if (IsServer)
         {
-            m_currHP.Value = m_maxHP;
+            m_currHP.Value = GetComponent<UnitContext>().Health;
             m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
         }
 
-        m_hpbar.maxValue = m_maxHP;
+        m_hpbar.maxValue = m_currHP.Value;
         m_hpbar.value = m_currHP.Value;
 
         m_currHP.OnValueChanged += OnHealthChanged;
