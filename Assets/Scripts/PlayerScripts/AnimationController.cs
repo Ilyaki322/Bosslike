@@ -36,4 +36,11 @@ public class AnimationController : NetworkBehaviour
         m_animator.Animator.SetBool(m_idle, !b);
         m_animator.Animator.SetBool(m_abilityTrigger, b);
     }
+
+    public int GetSector()
+    {
+        float angle = m_movement.GetRotationAngle();
+        int sector = Mathf.FloorToInt((angle + 360) % 360 / 45f);
+        return sector;
+    }
 }

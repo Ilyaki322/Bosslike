@@ -15446,6 +15446,7 @@ GameObject:
   - component: {fileID: 1840755507}
   - component: {fileID: 1840755508}
   - component: {fileID: 1840755509}
+  - component: {fileID: 1840755510}
   m_Layer: 0
   m_Name: Dummy
   m_TagString: Untagged
@@ -15562,7 +15563,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  m_maxHP: 120
   m_hpbar: {fileID: 2020649690}
   m_dmgPopup: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
 --- !u!58 &1840755506
@@ -15673,6 +15673,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9791df42740a72f459900a53a550294a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1840755510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840755501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6158e0f119033e48aadf6304a43ccee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  m_maxHealth: 100
+  m_moveSpeed: 3
 --- !u!1 &2020649688
 GameObject:
   m_ObjectHideFlags: 0
