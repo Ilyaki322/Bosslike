@@ -8,16 +8,11 @@ public class PlayerCombat : NetworkBehaviour
 {
     [SerializeField, HideInInspector] public NetworkObjectPool m_objectPool;
 
-    [SerializeField] Animator m_animator;
-    [SerializeField] NetworkAnimator m_networkAnimator;
     [SerializeField] List<AbilityDataSO> m_abilitiesData;
-
     List<Ability> m_abilities = new();
     AbilityBar m_abilityBarUI;
 
     [HideInInspector] public Vector2 m_mousePosition;
-
-    //AnimationController m_animController;
 
     private void Update()
     {
@@ -38,7 +33,6 @@ public class PlayerCombat : NetworkBehaviour
     {
         m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
         if (!IsOwner) return;
-        //m_animController = GetComponentInChildren<AnimationController>();
         initAbilities();
         initUI();
     }
@@ -69,11 +63,6 @@ public class PlayerCombat : NetworkBehaviour
         }
     }
 
-    public void TriggerAnimation(string animTrigger)
-    {
-        m_networkAnimator.SetTrigger(animTrigger);
-    }
-
     public void RequestProjectile(GameObject projectile)
     {
         int index = m_objectPool.GetPrefabIndex(projectile);
@@ -102,6 +91,8 @@ public class PlayerCombat : NetworkBehaviour
 
     public void UseAbility(int i, Vector3 mousePos)
     {
+        if (!IsOwner) return;
+
         m_mousePosition = (Vector2)mousePos;
 
         if (m_abilities.Count <= i)
@@ -110,7 +101,6 @@ public class PlayerCombat : NetworkBehaviour
             return;
         }
 
-        //m_animController.setAbilityBool(true);
         m_abilities[i].Use(m_abilityBarUI, i);
     }
 }

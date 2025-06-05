@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4441202403104225142}
   - component: {fileID: 2633147230513962721}
   - component: {fileID: 2980522735606861739}
-  - component: {fileID: 107931053079759982}
   - component: {fileID: 8179031024883478737}
   - component: {fileID: 930234122460922719}
+  - component: {fileID: 3425660984573088977}
   m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
@@ -137,21 +137,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 1
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &107931053079759982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351529647485324246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 8179031024883478737}
 --- !u!95 &8179031024883478737
 Animator:
   serializedVersion: 7
@@ -187,6 +172,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &3425660984573088977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351529647485324246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01957602007d6814f9a9df12105a3250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 8179031024883478737}
 --- !u!1 &4096015724566326040
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +365,7 @@ GameObject:
   - component: {fileID: 2247575206853319990}
   - component: {fileID: 8810875811707989985}
   - component: {fileID: 4834208344661535311}
+  - component: {fileID: 4729759708072301098}
   m_Layer: 0
   m_Name: AbilityAnimation
   m_TagString: Untagged
@@ -452,7 +453,7 @@ Animator:
   m_GameObject: {fileID: 7322423368769826803}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 89587f62cdc65f649858f15bd2d6f884, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -476,6 +477,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d518e9dc0608541b17ee79fe293584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4729759708072301098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7322423368769826803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01957602007d6814f9a9df12105a3250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 8810875811707989985}
 --- !u!1 &7975538564149804285
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,10 +817,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_objectPool: {fileID: 0}
   m_animator: {fileID: 8179031024883478737}
-  m_networkAnimator: {fileID: 107931053079759982}
+  m_networkAnimator: {fileID: 0}
   m_abilitiesData:
   - {fileID: 11400000, guid: 1d6d6e4f4f7909244bfa5bb413ddec81, type: 2}
-  - {fileID: 11400000, guid: f44ae27f1edb9e84da018f404c769a0b, type: 2}
+  - {fileID: 11400000, guid: 0856adc2873599f49a4af85490ea9221, type: 2}
   - {fileID: 11400000, guid: ca5231b47c3926c4097652d40af49fed, type: 2}
   m_mousePosition: {x: 0, y: 0}
 --- !u!114 &13207417603883056

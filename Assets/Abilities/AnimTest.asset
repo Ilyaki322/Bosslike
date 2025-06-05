@@ -41,4 +41,4 @@ MonoBehaviour:
     - rid: 4557402114717646940
       type: {class: AnimationData, ns: , asm: Assembly-CSharp}
       data:
-        Controller: {fileID: 9100000, guid: 89587f62cdc65f649858f15bd2d6f884, type: 2}
+        Animation: 1

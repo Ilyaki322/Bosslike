@@ -5,7 +5,6 @@ using UnityEngine;
 [Serializable]
 public class AnimationData : AbilityData
 {
-    [field: SerializeField] public RuntimeAnimatorController Controller;
-    //[field: SerializeField] public AnimatorController Controller;
+    [field: SerializeField, Range(1,4)] public int Animation;
     public override Type getFunction() => typeof(AnimationFunction);
 }
