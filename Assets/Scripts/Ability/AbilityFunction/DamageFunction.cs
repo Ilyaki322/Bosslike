@@ -4,15 +4,19 @@ using UnityEngine;
 public class DamageFunction : AbilityFunction
 {
     [SerializeField] DamageData m_data;
-    BoxHitFunction m_boxhit;
+    //BoxHitFunction m_boxhit;
+    IDamageCollider m_dmgCollider;
 
     protected override void Use() {}
 
     public override void Init(AbilityData data)
     {
         base.Init(data);
-        m_boxhit = GetComponent<BoxHitFunction>();
-        m_boxhit.OnDetected += dealDamage;
+        //m_boxhit = GetComponent<BoxHitFunction>();
+        //m_boxhit.OnDetected += dealDamage;
+        m_dmgCollider = GetComponent<IDamageCollider>();
+        m_dmgCollider.OnDetected += dealDamage;
+        
         m_data = data as DamageData;
     }
 
@@ -30,6 +34,7 @@ public class DamageFunction : AbilityFunction
     public override void OnDestroy()
     {
         base.OnDestroy();
-        m_boxhit.OnDetected -= dealDamage;
+        //m_boxhit.OnDetected -= dealDamage;
+        m_dmgCollider.OnDetected -= dealDamage;
     }
 }
