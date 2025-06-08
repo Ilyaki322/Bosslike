@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BoxHitFunction : AbilityFunction
+public class BoxHitFunction : AbilityFunction, IDamageCollider
 {
     public event Action<Collider2D[]> OnDetected;
 

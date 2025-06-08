@@ -303,7 +303,7 @@ PrefabInstance:
       objectReference: {fileID: 2037125830}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[0].prefab
@@ -314,11 +314,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
+      propertyPath: m_pooledPrefabList.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 3489673001535581259, guid: 8981a7ea3e806d74cbdab66a6e373b4c, type: 3}
+    - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[0].prewarmCount
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[1].prewarmCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
+      propertyPath: m_pooledPrefabList.Array.data[2].prewarmCount
       value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd609f2326260674b8bbd07fa6768e5a, type: 3}
+  m_Name: TriangleTest
+  m_EditorClassIdentifier: 
+  AbilityDatas:
+  - rid: 4557402201695977586
+  - rid: 4557402201695977642
+  AbilityIcon: {fileID: 3738171454124475781, guid: 507982cf30f04ad4d8f8ceb14c691af2, type: 3}
+  AbilityCooldown: 3
+  IsUseableByBoss: 1
+  AbilityPriority: 5
+  AbilityRange: 3
+  references:
+    version: 2
+    RefIds:
+    - rid: 4557402201695977586
+      type: {class: TriangleFrontalData, ns: , asm: Assembly-CSharp}
+      data:
+        <ChargeTime>k__BackingField: 2
+        <Distance>k__BackingField: 3
+        <Fov>k__BackingField: 1
+        <Mat>k__BackingField: {fileID: 2100000, guid: 7751886087e7e07409d09bc1c48a1c41, type: 2}
+        <HitLayerMask>k__BackingField:
+          serializedVersion: 2
+          m_Bits: 9
+    - rid: 4557402201695977642
+      type: {class: DamageData, ns: , asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 32

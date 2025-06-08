@@ -22,4 +22,4 @@ MonoBehaviour:
     - rid: 2044379634224333057
       type: {class: ProjectileData, ns: , asm: Assembly-CSharp}
       data:
-        m_projectile: {fileID: 7983661663601266262, guid: 5f4d300701e3f624d9e021f8edeb42fe, type: 3}
+        m_projectile: {fileID: 3489673001535581259, guid: 8981a7ea3e806d74cbdab66a6e373b4c, type: 3}

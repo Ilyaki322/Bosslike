@@ -13,6 +13,11 @@ public class AbilityDataSO : ScriptableObject
     [SerializeField] public Sprite AbilityIcon;
     [SerializeField] public float AbilityCooldown;
 
+    [Space(10)]
+    [SerializeField] public bool IsUseableByBoss;
+    [SerializeField] public float AbilityPriority;
+    [SerializeField] public float AbilityRange;
+
     private void OnEnable()
     {
         if (AbilityDatas == null) AbilityDatas = new List<AbilityData>();

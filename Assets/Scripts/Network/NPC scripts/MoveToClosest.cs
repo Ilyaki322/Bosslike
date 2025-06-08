@@ -38,7 +38,8 @@ public class MoveToClosest : ICommand
         if (Physics2D.OverlapCircle(m_transform.position, CollisionRadius, PlayerLayer) is Collider2D hit
             && hit.CompareTag("Player"))
         {
-            EnqueueCircleWalk(ctx);
+            //EnqueueCircleWalk(ctx);
+            ctx.Controller.PushCommand(new UseAbilityCommand(0,ctx.AbilityController), true);
             return true;
         }
 

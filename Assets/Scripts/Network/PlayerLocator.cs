@@ -15,4 +15,20 @@ public class PlayerLocator : MonoBehaviour, IPlayerLocator
 
         return players;
     }
+
+    public Transform GetPlayerByID(ulong id)
+    {
+        return NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id).transform;
+    }
+
+    public Dictionary<ulong, Transform> GetPlayersAndID()
+    {
+        Dictionary<ulong, Transform> d = new();
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            d[client.ClientId] = client.PlayerObject.transform;
+        }
+
+        return d;
+    }
 }
