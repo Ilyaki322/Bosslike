@@ -25,6 +25,8 @@ public class KnockFunction : AbilityFunction
                 target.Knock(direction, m_data.Force);
             }
         }
+
+        m_ability.HasEnded = true;
     }
 
     public override void OnDestroy()

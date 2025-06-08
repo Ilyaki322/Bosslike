@@ -15950,7 +15950,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8877230404407579919}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
@@ -16150,6 +16150,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_abilitiesData:
   - {fileID: 11400000, guid: 5a36ef9bec953fd4b8fcb97b41ab64be, type: 2}
+  - {fileID: 11400000, guid: 1d4e729b7a682bb478b3bb5c6432194f, type: 2}
+  - {fileID: 11400000, guid: 20c9442ef938c7a4aabba9cbb144cc6a, type: 2}
 --- !u!114 &8877230404407579927
 MonoBehaviour:
   m_ObjectHideFlags: 0

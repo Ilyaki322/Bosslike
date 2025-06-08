@@ -7,6 +7,8 @@ public class BossUnitController : UnitController
     private Vector2 m_prevPos;
     private Vector2 m_moveDirection;
 
+    private float m_prevRotation = 0f;
+
     public override void OnNetworkSpawn()
     {
         if (!IsServer)
@@ -37,10 +39,10 @@ public class BossUnitController : UnitController
     {
         if(m_moveDirection.sqrMagnitude > 0.00001f)
         {
-            return Mathf.Atan2(m_moveDirection.y, m_moveDirection.x) * Mathf.Rad2Deg;
+            m_prevRotation = Mathf.Atan2(m_moveDirection.y, m_moveDirection.x) * Mathf.Rad2Deg;
+            return m_prevRotation;
         }
-        
-        return 0f;
+        return m_prevRotation;
     }
 
     void FixedUpdate()

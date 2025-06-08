@@ -128,9 +128,9 @@ public class TriangleFrontalFunction : AbilityFunction, IDamageCollider
         return ((b1 == b2) && (b2 == b3));
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.parent.position, transform.TransformPoint(m_middle));
-    }
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawLine(transform.parent.position, transform.TransformPoint(m_middle));
+    //}
 }
