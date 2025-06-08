@@ -5,36 +5,38 @@ using UnityEngine.Tilemaps;
 
 public class MoveToClosest : ICommand
 {
-    // One-time cache of the ground Tilemap
+    // --- Cached singletons ---
     private static Tilemap s_ground;
-
-    // Runtime state
-    private float m_speed;
-    private Transform m_transform;
-    private Transform m_target;
-    private List<Vector3> m_path;
-    private int m_currentIndex;
-
+    private static Tilemap s_obstacles;
     private static PlayerLocator s_playerLocator;
 
-    // Collision settings
+    // --- Runtime state ---
+    private Transform m_transform;
+    private Transform m_target;
+    private List<Vector3> m_path = new List<Vector3>();
+    private int m_currentIndex;
+    private float m_speed;
+
+    // --- Settings ---
     private const float CollisionRadius = 1f;
     private static readonly LayerMask PlayerLayer = LayerMask.GetMask("Player");
 
     public void Enter(UnitContext ctx)
     {
         Debug.Log("[MoveToClosest] Entering command.");
-        if(s_playerLocator == null)
-            s_playerLocator = NetworkManager.Singleton.GetComponent<PlayerLocator>();
-        m_speed = ctx.MoveSpeed;
+        CacheTilemaps();
+        CachePlayerLocator();
+
         m_transform = ctx.Transform;
-        CacheGroundTilemap();
-        LocateNearestPlayer(ctx);
-        InitializePath();
+        m_speed = ctx.MoveSpeed;
+
+        LocateNearestPlayer();
+        BuildPath();
     }
 
     public bool Execute(UnitContext ctx, float deltaTime)
     {
+        // If we've collided with the player, swap to circle-walk
         if (Physics2D.OverlapCircle(m_transform.position, CollisionRadius, PlayerLayer) is Collider2D hit
             && hit.CompareTag("Player"))
         {
@@ -42,42 +44,54 @@ public class MoveToClosest : ICommand
             return true;
         }
 
+        // If no valid path or no target, end this command
         if (m_target == null || m_path.Count == 0)
-        {
             return true;
-        }
 
-
-        MoveTowardsTarget(deltaTime);
+        // Step along the computed path
+        MoveAlongPath(deltaTime);
         return false;
     }
 
     public void Exit(UnitContext ctx)
     {
-        m_path = null;
+        m_path.Clear();
+        m_currentIndex = 0;
     }
 
-    // --- Helpers ---
-
-    private void CacheGroundTilemap()
+    // --- Caching ---
+    private void CacheTilemaps()
     {
-        if (s_ground == null)
+        if (s_ground == null || s_obstacles == null)
         {
-            var go = GameObject.Find("GroundTilemap");
-            if (go != null)
-                s_ground = go.GetComponent<Tilemap>();
-            else
-                throw new System.Exception("[MoveToClosest] 'GroundTilemap' not found in scene.");
+            var groundGo = GameObject.Find("Ground");
+            var obsGo = GameObject.Find("Obstacles");
+            if (!groundGo || !obsGo)
+                throw new System.Exception("[MoveToClosest] Missing 'GroundTilemap' or 'Obstacles' in scene.");
+
+            s_ground = groundGo.GetComponent<Tilemap>();
+            s_obstacles = obsGo.GetComponent<Tilemap>();
         }
     }
 
-    private void LocateNearestPlayer(UnitContext ctx)
+    private void CachePlayerLocator()
+    {
+        if (s_playerLocator == null)
+        {
+            s_playerLocator = NetworkManager.Singleton.GetComponent<PlayerLocator>();
+            if (s_playerLocator == null)
+                throw new System.Exception("[MoveToClosest] PlayerLocator not found on NetworkManager.");
+        }
+    }
+
+    // --- Player target & path setup ---
+    private void LocateNearestPlayer()
     {
         m_target = null;
         float bestDist = float.MaxValue;
         foreach (var p in s_playerLocator.GetPlayers())
         {
-            float d = Vector2.Distance((Vector2)m_transform.position, (Vector2)p.position);
+            float d = Vector2.Distance(m_transform.position, p.position);
             if (d < bestDist)
             {
                 bestDist = d;
@@ -86,53 +100,43 @@ public class MoveToClosest : ICommand
         }
     }
 
-    private void InitializePath()
+    private void BuildPath()
     {
-        m_path = new List<Vector3>();
+        m_path.Clear();
         m_currentIndex = 0;
-        if (s_ground != null && m_target != null)
-        {
-            Vector3Int start = s_ground.WorldToCell(m_transform.position);
-            Vector3Int goal = s_ground.WorldToCell(m_target.position);
-            m_path = FindPath(start, goal);
-        }
-        else
-        {
-            m_path = new List<Vector3>();
-        }
+        if (m_target == null) return;
+
+        var start = s_ground.WorldToCell(m_transform.position);
+        var goal = s_ground.WorldToCell(m_target.position);
+
+        // Validate both cells
+        if (!IsCellValid(start) || !IsCellValid(goal))
+            return;
+
+        m_path = FindPath(start, goal);
     }
 
-    private void MoveTowardsTarget(float deltaTime)
+    private bool IsCellValid(Vector3Int cell)
     {
-        if (m_path != null && m_currentIndex < m_path.Count)
-            FollowPath(deltaTime);
-        else
-            StraightLineChase(deltaTime);
+        if (!s_ground.cellBounds.Contains(cell)) return false;
+        if (!s_ground.HasTile(cell)) return false;
+        if (s_obstacles.HasTile(cell)) return false;
+        return true;
     }
 
-    private void FollowPath(float deltaTime)
+    // --- Movement ---
+    private void MoveAlongPath(float dt)
     {
+        if (m_currentIndex >= m_path.Count)
+            return;
+
         Vector3 waypoint = m_path[m_currentIndex];
         waypoint.z = m_transform.position.z;
-        Vector3 newPos = Vector3.MoveTowards(
-            m_transform.position, waypoint,
-            m_speed * deltaTime);
+        Vector3 newPos = Vector3.MoveTowards(m_transform.position, waypoint, m_speed * dt);
         m_transform.position = newPos;
-        if (Vector2.Distance((Vector2)newPos, (Vector2)waypoint) < 0.05f)
-            m_currentIndex++;
-    }
 
-    private void StraightLineChase(float deltaTime)
-    {
-        if (m_target == null) return;
-        Vector3 goalPos = new Vector3(
-            m_target.position.x,
-            m_target.position.y,
-            m_transform.position.z);
-        Vector3 newPos = Vector3.MoveTowards(
-            m_transform.position, goalPos,
-            m_speed * deltaTime);
-        m_transform.position = newPos;
+        if (Vector2.Distance(newPos, waypoint) < 0.05f)
+            m_currentIndex++;
     }
 
     private void EnqueueCircleWalk(UnitContext ctx)
@@ -144,8 +148,7 @@ public class MoveToClosest : ICommand
         ctx.Controller.PushCommand(new CircleWalk(center, radius, angularSpeed, duration), true);
     }
 
-    // --- A* Pathfinding with diagonals (Octile distance) ---
-
+    // --- A* Pathfinding ---
     private List<Vector3> FindPath(Vector3Int start, Vector3Int goal)
     {
         var openSet = new List<Node> { new Node(start, null, 0, Heuristic(start, goal)) };
@@ -163,9 +166,13 @@ public class MoveToClosest : ICommand
 
             foreach (var nbr in GetNeighbors(current.cell))
             {
-                if (closedSet.Contains(nbr) || !s_ground.HasTile(nbr))
+                if (!IsCellValid(nbr) || closedSet.Contains(nbr))
                     continue;
+
                 bool diagonal = nbr.x != current.cell.x && nbr.y != current.cell.y;
+                if (diagonal && IsDiagonalBlocked(current.cell, nbr))
+                    continue;
+
                 float cost = current.gCost + (diagonal ? 1.41421356f : 1f);
                 var existing = openSet.Find(n => n.cell == nbr);
                 if (existing == null)
@@ -177,18 +184,23 @@ public class MoveToClosest : ICommand
                 }
             }
         }
+
         return new List<Vector3>();
+    }
+
+    private bool IsDiagonalBlocked(Vector3Int from, Vector3Int to)
+    {
+        var stepX = new Vector3Int(to.x, from.y, to.z);
+        var stepY = new Vector3Int(from.x, to.y, to.z);
+        return !IsCellValid(stepX) || !IsCellValid(stepY);
     }
 
     private List<Vector3> RetracePath(Node endNode)
     {
         var stack = new Stack<Node>();
-        var node = endNode;
-        while (node != null)
-        {
+        for (var node = endNode; node != null; node = node.parent)
             stack.Push(node);
-            node = node.parent;
-        }
+
         var path = new List<Vector3>();
         while (stack.Count > 0)
         {
@@ -200,12 +212,10 @@ public class MoveToClosest : ICommand
 
     private IEnumerable<Vector3Int> GetNeighbors(Vector3Int c)
     {
-        // Orthogonal
         yield return new Vector3Int(c.x + 1, c.y, c.z);
         yield return new Vector3Int(c.x - 1, c.y, c.z);
         yield return new Vector3Int(c.x, c.y + 1, c.z);
         yield return new Vector3Int(c.x, c.y - 1, c.z);
-        // Diagonals
         yield return new Vector3Int(c.x + 1, c.y + 1, c.z);
         yield return new Vector3Int(c.x + 1, c.y - 1, c.z);
         yield return new Vector3Int(c.x - 1, c.y + 1, c.z);

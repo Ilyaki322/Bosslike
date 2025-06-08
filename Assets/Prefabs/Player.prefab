@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -816,8 +816,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_objectPool: {fileID: 0}
-  m_animator: {fileID: 8179031024883478737}
-  m_networkAnimator: {fileID: 0}
   m_abilitiesData:
   - {fileID: 11400000, guid: 1d6d6e4f4f7909244bfa5bb413ddec81, type: 2}
   - {fileID: 11400000, guid: 0856adc2873599f49a4af85490ea9221, type: 2}
