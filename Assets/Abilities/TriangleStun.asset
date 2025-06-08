@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd609f2326260674b8bbd07fa6768e5a, type: 3}
-  m_Name: TriangleTest
+  m_Name: TriangleStun
   m_EditorClassIdentifier: 
   AbilityDatas:
   - rid: 4557402201695977586
   - rid: 4557402201695977642
-  AbilityIcon: {fileID: 3738171454124475781, guid: 507982cf30f04ad4d8f8ceb14c691af2, type: 3}
-  AbilityCooldown: 3
+  - rid: 4557402222235222284
+  AbilityIcon: {fileID: 3156634924717718424, guid: dbeca40c49770534680c57268a0a5563, type: 3}
+  AbilityCooldown: 30
   IsUseableByBoss: 1
   AbilityPriority: 5
   AbilityRange: 3
@@ -37,3 +38,7 @@ MonoBehaviour:
       type: {class: DamageData, ns: , asm: Assembly-CSharp}
       data:
         <Damage>k__BackingField: 32
+    - rid: 4557402222235222284
+      type: {class: StunData, ns: , asm: Assembly-CSharp}
+      data:
+        <Duration>k__BackingField: 3
