@@ -58,6 +58,7 @@ public class TriangleFrontalFunction : AbilityFunction, IDamageCollider
         m_meshRenderer.material.SetFloat("_Blend", 0f);
         m_mesh.mesh.Clear();
         checkColliders();
+        m_ability.HasEnded = true;
     }
 
     private void checkColliders()

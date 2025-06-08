@@ -15,9 +15,9 @@ public class BossUnitController : UnitController
             return;
         }
 
+        var brain = GetComponent<BossBigBrain>();
         m_prevPos = m_ctx.transform.position;
-        var center = (Vector2)transform.position;
-        PushCommand(new CircleWalk(center, 3f, Mathf.PI / 4f), true);
+        PushCommand(brain, false);
     }
 
     private void calculatePositions()

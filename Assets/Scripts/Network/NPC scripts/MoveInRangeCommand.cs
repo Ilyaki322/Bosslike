@@ -1,45 +1,54 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MoveToClosest : ICommand
+public class MoveInRangeCommand : ICommand
 {
     // One-time cache of the ground Tilemap
     private static Tilemap s_ground;
 
     // Runtime state
     private float m_speed;
+    private float m_range;
     private Transform m_transform;
     private Transform m_target;
     private List<Vector3> m_path;
     private int m_currentIndex;
 
-    private static PlayerLocator s_playerLocator;
 
     // Collision settings
     private const float CollisionRadius = 1f;
     private static readonly LayerMask PlayerLayer = LayerMask.GetMask("Player");
+    private static readonly LayerMask m_obstacleLayer = LayerMask.GetMask("Obsticle"); // non existant yet
+
+    public MoveInRangeCommand(Transform target, float range)
+    {
+        m_target = target;
+        m_range = range;
+    }
 
     public void Enter(UnitContext ctx)
     {
-        Debug.Log("[MoveToClosest] Entering command.");
-        if(s_playerLocator == null)
-            s_playerLocator = NetworkManager.Singleton.GetComponent<PlayerLocator>();
+        Debug.Log("[MoveToTarget] Entering command.");
+
         m_speed = ctx.MoveSpeed;
         m_transform = ctx.Transform;
         CacheGroundTilemap();
-        LocateNearestPlayer(ctx);
         InitializePath();
     }
 
     public bool Execute(UnitContext ctx, float deltaTime)
     {
-        if (Physics2D.OverlapCircle(m_transform.position, CollisionRadius, PlayerLayer) is Collider2D hit
-            && hit.CompareTag("Player"))
+        //if (Physics2D.OverlapCircle(m_transform.position, CollisionRadius, PlayerLayer) is Collider2D hit
+        //    && hit.CompareTag("Player"))
+        //{
+        //    //EnqueueCircleWalk(ctx);
+        //    ctx.Controller.PushCommand(new UseAbilityCommand(0, ctx.AbilityController), true);
+        //    return true;
+        //}
+        if (IsTargetInRangeAndVisible(ctx.Transform, m_target, m_range, m_obstacleLayer))
         {
-            //EnqueueCircleWalk(ctx);
-            ctx.Controller.PushCommand(new UseAbilityCommand(0,ctx.AbilityController), true);
             return true;
         }
 
@@ -47,7 +56,6 @@ public class MoveToClosest : ICommand
         {
             return true;
         }
-
 
         MoveTowardsTarget(deltaTime);
         return false;
@@ -60,6 +68,22 @@ public class MoveToClosest : ICommand
 
     // --- Helpers ---
 
+    bool IsTargetInRangeAndVisible(Transform origin, Transform target, float range, LayerMask obstructionMask)
+    {
+        Vector3 direction = target.position - origin.position;
+        float distance = direction.magnitude;
+
+        if (distance > range / 2)
+            return false;
+
+        if (Physics.Raycast(origin.position, direction.normalized, out RaycastHit hit, distance, obstructionMask))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private void CacheGroundTilemap()
     {
         if (s_ground == null)
@@ -69,21 +93,6 @@ public class MoveToClosest : ICommand
                 s_ground = go.GetComponent<Tilemap>();
             else
                 throw new System.Exception("[MoveToClosest] 'GroundTilemap' not found in scene.");
-        }
-    }
-
-    private void LocateNearestPlayer(UnitContext ctx)
-    {
-        m_target = null;
-        float bestDist = float.MaxValue;
-        foreach (var p in s_playerLocator.GetPlayers())
-        {
-            float d = Vector2.Distance((Vector2)m_transform.position, (Vector2)p.position);
-            if (d < bestDist)
-            {
-                bestDist = d;
-                m_target = p;
-            }
         }
     }
 

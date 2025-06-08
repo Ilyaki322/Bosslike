@@ -17,19 +17,22 @@ MonoBehaviour:
   - rid: 4557402201695977642
   AbilityIcon: {fileID: 3738171454124475781, guid: 507982cf30f04ad4d8f8ceb14c691af2, type: 3}
   AbilityCooldown: 3
+  IsUseableByBoss: 1
+  AbilityPriority: 5
+  AbilityRange: 3
   references:
     version: 2
     RefIds:
     - rid: 4557402201695977586
       type: {class: TriangleFrontalData, ns: , asm: Assembly-CSharp}
       data:
-        <ChargeTime>k__BackingField: 1
+        <ChargeTime>k__BackingField: 2
         <Distance>k__BackingField: 3
         <Fov>k__BackingField: 1
         <Mat>k__BackingField: {fileID: 2100000, guid: 7751886087e7e07409d09bc1c48a1c41, type: 2}
         <HitLayerMask>k__BackingField:
           serializedVersion: 2
-          m_Bits: 1
+          m_Bits: 9
     - rid: 4557402201695977642
       type: {class: DamageData, ns: , asm: Assembly-CSharp}
       data:

@@ -14,6 +14,8 @@ public class Healthbar_Network : NetworkBehaviour
     NetworkObjectPool m_objectPool;
     private UnitContext m_ctx;
 
+    DamageLogger m_log;
+
     NetworkVariable<float> m_currHP = new NetworkVariable<float>();
 
     public override void OnNetworkSpawn()
@@ -22,6 +24,7 @@ public class Healthbar_Network : NetworkBehaviour
         {
             m_currHP.Value = GetComponent<UnitContext>().Health;
             m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
+            TryGetComponent<DamageLogger>(out m_log);
         }
 
         m_hpbar.maxValue = m_currHP.Value;
@@ -39,6 +42,7 @@ public class Healthbar_Network : NetworkBehaviour
     public void TakeDamageServerRpc(float damage, ulong attackerID)
     {
         m_currHP.Value -= damage;
+        if (m_log) m_log.RegisterDamage(attackerID, Mathf.RoundToInt(damage));
 
         var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
         popup.GetComponent<NetworkObject>().Spawn(true);

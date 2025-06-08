@@ -45,7 +45,7 @@ public abstract class UnitController : NetworkBehaviour
 
     private void TryActivateNextCommand()
     {
-        if (m_current == null && m_commands.Count > 0)
+        if (m_commands.Count > 0)
         {
             m_current = m_commands[m_commands.Count - 1];
         }

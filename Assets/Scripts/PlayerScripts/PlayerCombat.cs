@@ -1,18 +1,17 @@
-using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 public class PlayerCombat : NetworkBehaviour
 {
-    [SerializeField, HideInInspector] public NetworkObjectPool m_objectPool;
+    NetworkObjectPool m_objectPool;
 
     [SerializeField] List<AbilityDataSO> m_abilitiesData;
     List<Ability> m_abilities = new();
     AbilityBar m_abilityBarUI;
 
-    [HideInInspector] public Vector2 m_mousePosition;
+    /*[HideInInspector] public*/
+    Vector2 m_mousePosition;
 
     private void Update()
     {
@@ -46,7 +45,7 @@ public class PlayerCombat : NetworkBehaviour
     // TODO: add all components --> only then init all.
     private void initAbilities()
     {
-        for(int i = 0; i < m_abilitiesData.Count; i++)
+        for (int i = 0; i < m_abilitiesData.Count; i++)
         {
             var newObj = new GameObject($"Ability{i}");
             newObj.transform.parent = transform;
@@ -54,7 +53,7 @@ public class PlayerCombat : NetworkBehaviour
             var ability = newObj.AddComponent<Ability>();
             ability.Init(NetworkManager.Singleton.LocalClientId, m_abilitiesData[i].AbilityCooldown);
             m_abilities.Add(ability);
-            
+
             foreach (var data in m_abilitiesData[i].AbilityDatas)
             {
                 var abilityComponent = newObj.AddComponent(data.getFunction()) as AbilityFunction;
