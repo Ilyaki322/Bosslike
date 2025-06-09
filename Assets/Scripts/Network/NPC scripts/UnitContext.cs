@@ -11,7 +11,8 @@ public class UnitContext : NetworkBehaviour
     private Transform m_transform;
     private UnitController m_controller;
     private BossAbilityController m_bossAbilityController;
-    [HideInInspector] public readonly NetworkVariable<int> m_currHealth = new NetworkVariable<int>();
+
+    public int MaxHealth => m_maxHealth;
 
     private void Awake()
     {
@@ -20,12 +21,6 @@ public class UnitContext : NetworkBehaviour
         m_bossAbilityController = GetComponent<BossAbilityController>();
     }
 
-    public override void OnNetworkSpawn()
-    {
-        m_currHealth.Value = m_maxHealth;
-    }
-
-    public int Health { get { return m_currHealth.Value; } set { setHealthServerRpc(value); } }
     public Transform Transform { get { return m_transform; } }
     public float MoveSpeed { get { return m_moveSpeed; } set { m_moveSpeed = value; } }
     public float RotationSpeed { get { return m_rotationSpeed; } set { m_rotationSpeed = value; } }
@@ -34,11 +29,5 @@ public class UnitContext : NetworkBehaviour
     {
         get { return m_bossAbilityController; }
         private set { m_bossAbilityController = value; }
-    }
-
-    [ServerRpc]
-    private void setHealthServerRpc(int health)
-    {
-       m_currHealth.Value = Mathf.Clamp((m_currHealth.Value + health), 0, m_maxHealth);
     }
 }

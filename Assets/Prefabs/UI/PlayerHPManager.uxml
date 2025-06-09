@@ -1,4 +1,14 @@
-<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Prefabs/UI/PlayerHPManager.uss?fileID=7433441132597879392&amp;guid=0bbddfff3ab19714d82264c2512216d8&amp;type=3#PlayerHPManager" />
-    <engine:VisualElement name="hp-container" style="flex-grow: 1; width: 100%; top: 0; left: 0; background-color: rgba(255, 0, 0, 0.3); right: 200px;" />
-</engine:UXML>
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="UIElementsSchema/UIElements.xsd">
+
+  <!-- load the USS in the same folder -->
+  <Style src="PlayerHPManager.uss" pathRelativeToDocument="true" />
+
+  <VisualElement name="hp-container">
+    <ScrollView name="hp-list" class="hp-list" />
+  </VisualElement>
+</UXML>

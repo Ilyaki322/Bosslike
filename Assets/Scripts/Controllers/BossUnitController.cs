@@ -43,7 +43,7 @@ public class BossUnitController : UnitController
         return 0f;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (!IsServer) return;
         StepCommands();

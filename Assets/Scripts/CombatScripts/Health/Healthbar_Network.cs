@@ -11,18 +11,21 @@ public class Healthbar_Network : NetworkBehaviour
     [SerializeField] Slider m_hpbar;
 
     [SerializeField] GameObject m_dmgPopup;
+    [SerializeField] bool m_showDmg = false;
     NetworkObjectPool m_objectPool;
+
     private UnitContext m_ctx;
 
     DamageLogger m_log;
 
     NetworkVariable<float> m_currHP = new NetworkVariable<float>();
+    public NetworkVariable<float> CurrHP => m_currHP;
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
+        if (!IsOwner)
         {
-            m_currHP.Value = GetComponent<UnitContext>().Health;
+            m_currHP.Value = GetComponent<UnitContext>().MaxHealth;
             m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
             TryGetComponent<DamageLogger>(out m_log);
         }
@@ -51,22 +54,6 @@ public class Healthbar_Network : NetworkBehaviour
 
     private void OnHealthChanged(float oldValue, float newValue)
     {
-        m_hpbar.value = newValue;
+        m_hpbar.value = Mathf.Clamp(0,newValue, m_ctx.MaxHealth);
     }
-
-
-
-#region trash
-
-    //[Rpc(SendTo.Server)]
-    //public void TakeDamageServerRpc(float damage)
-    //{
-    //    m_currHP.Value -= damage;
-
-    //    var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
-    //    popup.GetComponent<NetworkObject>().Spawn(true);
-    //    popup.GetComponent<DamagePopup>().Config(1f, transform.position, damage);
-    //}
-
-#endregion
 }
