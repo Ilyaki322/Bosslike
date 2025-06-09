@@ -45,7 +45,7 @@ public class BossUnitController : UnitController
         return m_prevRotation;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (!IsServer) return;
         StepCommands();
