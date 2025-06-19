@@ -43,4 +43,9 @@ public class AnimationController : NetworkBehaviour
         int sector = Mathf.FloorToInt((angle + 360) % 360 / 45f);
         return sector;
     }
+
+    public void setMoving(bool m)
+    {
+        m_animator.Animator.SetBool(m_idle, !m);
+    }
 }
