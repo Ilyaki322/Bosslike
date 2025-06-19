@@ -27,7 +27,7 @@ public class AnimationFunction : AbilityFunction
         m_announcer = transform.parent.Find("AbilityAnimation").GetComponent<AnimationAnnouncer>();
         m_announcer.OnFinish += onFinish;
         m_abilityHash = Animator.StringToHash("Ability");
-        string blend = "Ability" + m_data.Animation.ToString();
+        string blend = "Ability" + m_data.Animation.ToString() + "b";
         m_blend = Animator.StringToHash(blend);
         m_charAnimator = transform.parent.Find("Sprite").GetComponent<AnimationController>();
     }

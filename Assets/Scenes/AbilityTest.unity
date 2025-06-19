@@ -15619,6 +15619,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_hpbar: {fileID: 2020649690}
   m_dmgPopup: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
+  m_showDmg: 0
 --- !u!58 &1840755506
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -15742,6 +15743,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_maxHealth: 100
   m_moveSpeed: 3
+  m_rotationSpeed: 5
 --- !u!1 &2020649688
 GameObject:
   m_ObjectHideFlags: 0

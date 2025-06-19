@@ -7,6 +7,7 @@ public class PlayerMovementCommand : ICommand
     private Rigidbody2D m_rb;
     private Transform m_transform;
     private float m_speed = 5f;
+    private AnimationController m_animController;
 
     public void Enter(UnitContext context)
     {
@@ -15,6 +16,7 @@ public class PlayerMovementCommand : ICommand
         m_rb = context.GetComponent<Rigidbody2D>();
         m_transform = context.Transform;
         m_speed = context.MoveSpeed;
+        m_animController = context.GetComponentInChildren<AnimationController>();
     }
 
     public bool Execute(UnitContext context, float deltaTime)
@@ -37,8 +39,13 @@ public class PlayerMovementCommand : ICommand
         if (m_input.moveUpdate.sqrMagnitude > 0.1f)
         {
             m_rb.linearVelocity = m_input.moveUpdate.normalized * m_speed;
+            m_animController.setMoving(true);
         }
-        else m_rb.linearVelocity = Vector2.zero;
+        else
+        {
+            m_rb.linearVelocity = Vector2.zero;
+            m_animController.setMoving(false);
+        }
     }
 
     private void LookAtMouse(UnitContext context)
