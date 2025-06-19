@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: dbeca40c49770534680c57268a0a5563
+guid: 7d671c29f00e5f04aa4c8cd0105d72a8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3156634924717718424
-    second: Stun_0
+      213: -4490178468092166836
+    second: NorthEast_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Stun_0
+      name: NorthEast_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 70
+        y: 15
+        width: 597
+        height: 1822
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 89b346d4dbe9ecb20800000000000000
-      internalID: 3156634924717718424
+      spriteID: c4d3247297eafa1c0800000000000000
+      internalID: -4490178468092166836
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c0862eaaa57744345ab6c22d84ccd4dc
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Stun_0: 3156634924717718424
+      NorthEast_0: -4490178468092166836
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

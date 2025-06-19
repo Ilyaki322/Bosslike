@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: dbeca40c49770534680c57268a0a5563
+guid: 056db65b43f15b54891a792e8981790e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3156634924717718424
-    second: Stun_0
+      213: 5910411902749347559
+    second: Southeast_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Stun_0
+      name: Southeast_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
+        x: 43
+        y: 26
+        width: 651
+        height: 1799
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 89b346d4dbe9ecb20800000000000000
-      internalID: 3156634924717718424
+      spriteID: 7ee8d939f40060250800000000000000
+      internalID: 5910411902749347559
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Stun_0: 3156634924717718424
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

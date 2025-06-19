@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: dbeca40c49770534680c57268a0a5563
+guid: e93228f976949dc41b0a235b94dc3dba
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3156634924717718424
-    second: Stun_0
+      213: -4052240396025476418
+    second: NEwalk1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Stun_0
+      name: NEwalk1_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 70
+        y: 2
+        width: 535
+        height: 1847
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 89b346d4dbe9ecb20800000000000000
-      internalID: 3156634924717718424
+      spriteID: ebac96a54dc83c7c0800000000000000
+      internalID: -4052240396025476418
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7204158e9c7836842bbe479082fba68a
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Stun_0: 3156634924717718424
+      NEwalk1_0: -4052240396025476418
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
