@@ -581,6 +581,7 @@ GameObject:
   - component: {fileID: -1415410218870666780}
   - component: {fileID: 6138070477116449897}
   - component: {fileID: 349621265923293192}
+  - component: {fileID: 7938366617636955451}
   m_Layer: 3
   m_Name: Player2
   m_TagString: Player
@@ -884,6 +885,7 @@ MonoBehaviour:
   m_rb: {fileID: -2183317777147763284}
   m_animController: {fileID: 930234122460922719}
   m_uc: {fileID: -3519782816826179843}
+  m_audioListener: {fileID: 7938366617636955451}
 --- !u!114 &349621265923293192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -898,3 +900,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_knockTime: 1
+--- !u!81 &7938366617636955451
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8877230402697404518}
+  m_Enabled: 1

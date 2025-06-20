@@ -16,8 +16,12 @@ MonoBehaviour:
   - rid: 2044379634224333003
   - rid: 2044379634224333004
   - rid: 4557402114717646940
+  - rid: 4557402480417177731
   AbilityIcon: {fileID: 5809742885717775979, guid: 8db4f7e20c8810d488b1207219e98bd2, type: 3}
   AbilityCooldown: 2
+  IsUseableByBoss: 0
+  AbilityPriority: 0
+  AbilityRange: 0
   references:
     version: 2
     RefIds:
@@ -42,3 +46,8 @@ MonoBehaviour:
       type: {class: AnimationData, ns: , asm: Assembly-CSharp}
       data:
         Animation: 1
+    - rid: 4557402480417177731
+      type: {class: SoundData, ns: , asm: Assembly-CSharp}
+      data:
+        <Clip>k__BackingField: {fileID: 8300000, guid: 31b48fbc631023246a30f33992d6c373, type: 3}
+        <Multiplayer>k__BackingField: 1
