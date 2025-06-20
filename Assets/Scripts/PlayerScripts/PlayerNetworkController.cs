@@ -17,6 +17,7 @@ public class PlayerNetworkController : NetworkBehaviour
     [SerializeField] private Rigidbody2D m_rb;
     [SerializeField] private AnimationController m_animController;
     [SerializeField] private UnitContext m_uc;
+    [SerializeField] private AudioListener m_audioListener;
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class PlayerNetworkController : NetworkBehaviour
         m_pim.enabled = false;
         m_animController.enabled = false;
         m_uc.enabled = false;
+        m_audioListener.enabled = false;
     }
     public override void OnNetworkSpawn()
     {
@@ -41,6 +43,7 @@ public class PlayerNetworkController : NetworkBehaviour
             m_pim.enabled = true;
             m_animController.enabled = true;
             m_uc.enabled = true;
+            m_audioListener.enabled = true;
 
             m_camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }
