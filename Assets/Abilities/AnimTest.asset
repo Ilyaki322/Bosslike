@@ -36,7 +36,7 @@ MonoBehaviour:
           height: 1
         m_hitLayerMask:
           serializedVersion: 2
-          m_Bits: 1
+          m_Bits: 8
         m_debug: 1
     - rid: 2044379634224333004
       type: {class: DamageData, ns: , asm: Assembly-CSharp}
