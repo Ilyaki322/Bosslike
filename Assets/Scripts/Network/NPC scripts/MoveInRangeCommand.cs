@@ -7,6 +7,7 @@ public class MoveInRangeCommand : ICommand
 {
     // One-time cache of the ground Tilemap
     private static Tilemap s_ground;
+    private static Tilemap s_obstacle;
 
     // Runtime state
     private float m_speed;
@@ -15,6 +16,9 @@ public class MoveInRangeCommand : ICommand
     private Transform m_target;
     private List<Vector3> m_path;
     private int m_currentIndex;
+
+    private float m_recalcFrames = 60;
+    private float m_framesCounter = 0;
 
 
     // Collision settings
@@ -40,13 +44,6 @@ public class MoveInRangeCommand : ICommand
 
     public bool Execute(UnitContext ctx, float deltaTime)
     {
-        //if (Physics2D.OverlapCircle(m_transform.position, CollisionRadius, PlayerLayer) is Collider2D hit
-        //    && hit.CompareTag("Player"))
-        //{
-        //    //EnqueueCircleWalk(ctx);
-        //    ctx.Controller.PushCommand(new UseAbilityCommand(0, ctx.AbilityController), true);
-        //    return true;
-        //}
         if (IsTargetInRangeAndVisible(ctx.Transform, m_target, m_range, m_obstacleLayer))
         {
             return true;
@@ -55,6 +52,13 @@ public class MoveInRangeCommand : ICommand
         if (m_target == null || m_path.Count == 0)
         {
             return true;
+        }
+
+        m_framesCounter++;
+        if (m_framesCounter >= m_recalcFrames)
+        {
+            m_framesCounter = 0;
+            InitializePath();
         }
 
         MoveTowardsTarget(deltaTime);
@@ -94,6 +98,12 @@ public class MoveInRangeCommand : ICommand
             else
                 throw new System.Exception("[MoveToClosest] 'GroundTilemap' not found in scene.");
         }
+        if (s_obstacle == null)
+        {
+            var go = GameObject.Find("Obstacles");
+            if (go != null) s_obstacle = go.GetComponent<Tilemap>();
+            else throw new System.Exception("Obstacle Tile map not found in scene");
+        }
     }
 
     private void InitializePath()
@@ -114,15 +124,16 @@ public class MoveInRangeCommand : ICommand
 
     private void MoveTowardsTarget(float deltaTime)
     {
-        if (m_path != null && m_currentIndex < m_path.Count)
+        if (m_path != null && m_currentIndex+1 < m_path.Count)
             FollowPath(deltaTime);
         else
-            StraightLineChase(deltaTime);
+            InitializePath();
+            //StraightLineChase(deltaTime);
     }
 
     private void FollowPath(float deltaTime)
     {
-        Vector3 waypoint = m_path[m_currentIndex];
+        Vector3 waypoint = m_path[m_currentIndex+1];
         waypoint.z = m_transform.position.z;
         Vector3 newPos = Vector3.MoveTowards(
             m_transform.position, waypoint,
@@ -173,7 +184,7 @@ public class MoveInRangeCommand : ICommand
 
             foreach (var nbr in GetNeighbors(current.cell))
             {
-                if (closedSet.Contains(nbr) || !s_ground.HasTile(nbr))
+                if (closedSet.Contains(nbr) || !s_ground.HasTile(nbr) || s_obstacle.HasTile(nbr))
                     continue;
                 bool diagonal = nbr.x != current.cell.x && nbr.y != current.cell.y;
                 float cost = current.gCost + (diagonal ? 1.41421356f : 1f);
