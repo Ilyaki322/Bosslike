@@ -23,15 +23,18 @@ public class Healthbar_Network : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner)
-        {
-            m_currHP.Value = GetComponent<UnitContext>().MaxHealth;
-            m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
-            TryGetComponent<DamageLogger>(out m_log);
-        }
+        if (!IsOwner) return;
 
-        m_hpbar.maxValue = m_currHP.Value;
-        m_hpbar.value = m_currHP.Value;
+        m_ctx = GetComponent<UnitContext>();
+        m_currHP.Value = m_ctx.MaxHealth;
+        m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
+        TryGetComponent<DamageLogger>(out m_log);
+
+        if (m_hpbar != null)
+        {
+            m_hpbar.maxValue = m_currHP.Value;
+            m_hpbar.value = m_currHP.Value;
+        }
 
         m_currHP.OnValueChanged += OnHealthChanged;
     }
