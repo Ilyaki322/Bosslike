@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f5d68a4458ffc2b4cbedff8b2e446901
+guid: 43702970d4d5272468623e81111a8ce5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2755491832497923269
-    second: IMG_0494_0
+      213: -9189023498879117399
+    second: Asset 4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1200
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG_0494_0
+      name: Asset 4_0
       rect:
         serializedVersion: 2
-        x: 564
-        y: 586
-        width: 2417
-        height: 1698
+        x: 0
+        y: 0
+        width: 197
+        height: 197
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5c46781f8397d3620800000000000000
-      internalID: 2755491832497923269
+      spriteID: 9a7d79430d70a7080800000000000000
+      internalID: -9189023498879117399
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      IMG_0494_0: 2755491832497923269
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

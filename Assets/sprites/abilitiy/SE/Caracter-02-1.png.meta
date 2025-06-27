@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f5d68a4458ffc2b4cbedff8b2e446901
+guid: cb9d4abdb296bb54fb6cedd70f7e1795
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2755491832497923269
-    second: IMG_0494_0
+      213: 3343468239247792758
+    second: Caracter-02-1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1200
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -96,27 +96,40 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG_0494_0
+      name: Caracter-02-1_0
       rect:
         serializedVersion: 2
-        x: 564
-        y: 586
-        width: 2417
-        height: 1698
+        x: 0
+        y: 0
+        width: 886
+        height: 1852
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5c46781f8397d3620800000000000000
-      internalID: 2755491832497923269
+      spriteID: 67a5a2e26a2666e20800000000000000
+      internalID: 3343468239247792758
       vertices: []
       indices: 
       edges: []
@@ -125,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: bcc7c83d210c4254c8e7b0a194bdbb6d
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      IMG_0494_0: 2755491832497923269
+      Caracter-02-1_0: 3343468239247792758
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
