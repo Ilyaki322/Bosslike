@@ -31,7 +31,7 @@ public class BossBigBrain : MonoBehaviour, ICommand
 
         if (Vector3.Distance(transform.position, m_mainTarget.position) < bestAbility.range)
         {
-            context.Controller.PushCommand(new StunCommand(1), true);
+            context.Controller.PushCommand(new StunCommand(2), true);
             context.Controller.PushCommand(new UseAbilityCommand(bestAbility.index, m_abilityManager) ,true);
             //context.Controller.PushCommand(new RotateToTargetCommand(m_mainTarget, context.RotationSpeed) ,true);
         }

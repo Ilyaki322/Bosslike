@@ -16,4 +16,4 @@ MonoBehaviour:
   Damage: 13
   Speed: 0
   HasLifetime: 1
-  LifeTime: 5
+  LifeTime: 2

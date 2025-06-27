@@ -8,6 +8,8 @@ public class ClipPlayer : NetworkBehaviour
 
     private Dictionary<int, AudioClip> m_clipDict = new();
 
+    [SerializeField] private AudioListener m_listener;
+
     private void Awake()
     {
         if (m_instance == null)
@@ -49,5 +51,10 @@ public class ClipPlayer : NetworkBehaviour
         }
 
         AudioSource.PlayClipAtPoint(m_clipDict[clip], loc);
+    }
+
+    public void OffListener()
+    {
+        m_listener.enabled = false;
     }
 }

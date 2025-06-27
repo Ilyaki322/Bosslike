@@ -33,7 +33,7 @@ public class PlayerNetworkController : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
+        ClipPlayer.Instance().OffListener(); // TO DISABLE NO LISTNERS ON SCENE
         if (IsOwner)
         {
             m_input.enabled = true;

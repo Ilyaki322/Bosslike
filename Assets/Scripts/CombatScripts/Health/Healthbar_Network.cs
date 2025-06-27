@@ -1,62 +1,72 @@
-using System;
 using Unity.Netcode;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Slider = UnityEngine.UI.Slider;
 
 public class Healthbar_Network : NetworkBehaviour
 {
-    [SerializeField] Slider m_hpbar;
+    [SerializeField] private Slider m_hpbar;
+    [SerializeField] private GameObject m_dmgPopup;
+    [SerializeField] private bool m_showDmg = false;
 
-    [SerializeField] GameObject m_dmgPopup;
-    [SerializeField] bool m_showDmg = false;
-    NetworkObjectPool m_objectPool;
-
+    private NetworkObjectPool m_objectPool;
+    private DamageLogger m_log;
     private UnitContext m_ctx;
 
-    DamageLogger m_log;
+    // Track only current HP here
+    public NetworkVariable<float> CurrHP { get; } =
+        new NetworkVariable<float>(0f,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server);
 
-    NetworkVariable<float> m_currHP = new NetworkVariable<float>();
-    public NetworkVariable<float> CurrHP => m_currHP;
+    public int MaxHealth => m_ctx.MaxHealth;
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        base.OnNetworkSpawn();
 
         m_ctx = GetComponent<UnitContext>();
-        m_currHP.Value = m_ctx.MaxHealth;
-        m_objectPool = GameObject.FindWithTag("NetworkObjectPool").GetComponent<NetworkObjectPool>();
-        TryGetComponent<DamageLogger>(out m_log);
+        m_objectPool = GameObject.FindWithTag("NetworkObjectPool")
+                                  .GetComponent<NetworkObjectPool>();
+        TryGetComponent(out m_log);
 
+        if (IsServer)
+            CurrHP.Value = m_ctx.MaxHealth;
+
+        // setup slider on all peers
         if (m_hpbar != null)
         {
-            m_hpbar.maxValue = m_currHP.Value;
-            m_hpbar.value = m_currHP.Value;
+            m_hpbar.maxValue = m_ctx.MaxHealth;
+            m_hpbar.value = CurrHP.Value;
         }
 
-        m_currHP.OnValueChanged += OnHealthChanged;
+        // subscribe to HP changes
+        CurrHP.OnValueChanged += OnHealthChanged;
     }
 
-    public void TakeDamage(float damage, ulong user)
+    public void TakeDamage(float damage, ulong attackerID)
     {
-        TakeDamageServerRpc(damage, user);
+        TakeDamageServerRpc(damage, attackerID);
     }
 
-    [Rpc(SendTo.Server)]
+    [ServerRpc(RequireOwnership = false)]
     public void TakeDamageServerRpc(float damage, ulong attackerID)
     {
-        m_currHP.Value -= damage;
+        CurrHP.Value = Mathf.Clamp(CurrHP.Value - damage, 0f, m_ctx.MaxHealth);
         if (m_log) m_log.RegisterDamage(attackerID, Mathf.RoundToInt(damage));
 
-        var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
-        popup.GetComponent<NetworkObject>().Spawn(true);
-        popup.GetComponent<DamagePopup>().Config(0.75f, transform.position, damage, attackerID);
+        if (m_showDmg)
+        {
+            var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
+            popup.GetComponent<NetworkObject>().Spawn(true);
+            popup.GetComponent<DamagePopup>()
+                 .Config(0.75f, transform.position, damage, attackerID);
+        }
     }
 
-    private void OnHealthChanged(float oldValue, float newValue)
+    private void OnHealthChanged(float oldVal, float newVal)
     {
-        m_hpbar.value = Mathf.Clamp(0,newValue, m_ctx.MaxHealth);
+        if (m_hpbar != null)
+            m_hpbar.value = newVal;
     }
 }
