@@ -133,6 +133,8 @@ MonoBehaviour:
   m_mask:
     serializedVersion: 2
     m_Bits: 0
+  m_pool: {fileID: 0}
+  m_slimePrefab: {fileID: 3049363491594701749, guid: 1e0bbbc53f8b1ec468793423f2fc72c8, type: 3}
 --- !u!70 &5489570007845010413
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

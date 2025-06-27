@@ -29,7 +29,8 @@ public class MoveInRangeCommand : ICommand
     public MoveInRangeCommand(Transform target, float range)
     {
         m_target = target;
-        m_range = range;
+        if (range < 1) m_range = 2;
+        else m_range = range;
     }
 
     public void Enter(UnitContext ctx)

@@ -20,7 +20,7 @@ public class DamageLogger : MonoBehaviour
         else
         {
             m_TotalDamageDict[user] += damage;
-            m_DamageLastTimeFrame[user] += damage;
+            //m_DamageLastTimeFrame[user] += damage;
         }
     }
 

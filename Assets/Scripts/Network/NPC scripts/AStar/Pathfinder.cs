@@ -26,6 +26,14 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
+    public Vector3 GetFlowDirection(Vector3 worldPos)
+    {
+        Vector3Int cell = m_tilemap.WorldToCell(worldPos);
+        return m_directions.TryGetValue(cell, out var dir) ? dir : Vector3.zero;
+    }
+
+    public GameObject GetTarget() => GameObject.FindWithTag("Player");
+
     public void RebuildFlowField()
     {
         var t = GameObject.FindWithTag("Player");

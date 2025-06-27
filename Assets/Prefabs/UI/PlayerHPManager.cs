@@ -2,155 +2,111 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 
 public class PlayerHPManager : NetworkBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
 
     private ScrollView hpList;
-
-    // track bars + health‐change callbacks on *every* client
     private readonly Dictionary<ulong, ProgressBar> bars = new();
     private readonly Dictionary<ulong, NetworkVariable<float>.OnValueChangedDelegate> callbacks = new();
 
-    // on the server only, remember which NetworkObjectReferences we’ve sent
-    private readonly Dictionary<ulong, NetworkObjectReference> serverRefs = new();
-    
     public override void OnNetworkSpawn()
     {
-        // grab the UI on every peer
+        base.OnNetworkSpawn();
+
+        // 1) Grab the UI ScrollView
         hpList = uiDocument.rootVisualElement.Q<ScrollView>("hp-list");
-
-        if (!IsServer)
+        if (hpList == null)
         {
-            bars.Clear();
-            callbacks.Clear();
+            Debug.LogError("[PlayerHPManager] Couldn't find ScrollView named 'hp-list'");
             return;
         }
 
-        var nm = NetworkManager.Singleton;
+        // 2) Seed everyone already connected (host counts too)
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+            AddPlayerEntry(client.ClientId);
 
-        // 1) Hook up future joins/leaves
-        nm.OnClientConnectedCallback += OnServerClientConnected;
-        nm.OnClientDisconnectCallback += OnServerClientDisconnected;
-
-        // 2) Send host’s own entry to itself
-        OnServerClientConnected(OwnerClientId);
+        // 3) Watch for future joins / leaves
+        NetworkManager.Singleton.OnClientConnectedCallback += AddPlayerEntry;
+        NetworkManager.Singleton.OnClientDisconnectCallback += RemovePlayerEntry;
     }
 
-    public override void OnDestroy()
+    public override void OnNetworkDespawn()
     {
-        if (NetworkManager.Singleton != null)
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnServerClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnServerClientDisconnected;
-        }
+        base.OnNetworkDespawn();
+        NetworkManager.Singleton.OnClientConnectedCallback -= AddPlayerEntry;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= RemovePlayerEntry;
     }
 
-    private void OnServerClientConnected(ulong newId)
+    private void AddPlayerEntry(ulong clientId)
     {
-        // A) first, send *all existing* entries to *just* the newcomer
-        foreach (var kv in serverRefs)
-        {
-            var existingId = kv.Key;
-            var objRef = kv.Value;
-            var ctx = NetworkManager.Singleton
-                             .ConnectedClients[existingId]
-                             .PlayerObject.GetComponent<UnitContext>();
-
-            // targeted RPC → only newId receives it
-            AddEntryClientRpc(objRef,ctx.MaxHealth);
-        }
-        
-        // B) now add & broadcast the newcomer to everyone
-        SendAddToAllRpc(newId);
-    }
-
-    private void OnServerClientDisconnected(ulong clientId)
-    {
-        if (serverRefs.TryGetValue(clientId, out var objRef))
-        {
-            // broadcast removal
-            RemoveEntryClientRpc(objRef);
-            serverRefs.Remove(clientId);
-        }
-    }
-
-    // helper to store & broadcast one ID → all clients
-    private void SendAddToAllRpc(ulong clientId)
-    {
-        var netObj = NetworkManager.Singleton
-                     .ConnectedClients[clientId]
-                     .PlayerObject;
-        var objRef = new NetworkObjectReference(netObj);
-        serverRefs[clientId] = objRef;
-
-        var healthNetwork = netObj.GetComponent<Healthbar_Network>();
-        AddEntryClientRpc(objRef, healthNetwork.CurrHP.Value);
-    }
-
-    // this RPC will run on *all* clients, unless you override via ClientRpcParams
-    [ClientRpc]
-    private void AddEntryClientRpc(NetworkObjectReference objRef, float currHP, ClientRpcParams rpcParams = default)
-    {
-        if (!objRef.TryGet(out var netObj)) return;
-        var id = netObj.OwnerClientId;
-
-        if (bars.ContainsKey(id))
+        // avoid duplicates
+        if (bars.ContainsKey(clientId))
             return;
 
-        var hb = netObj.GetComponent<Healthbar_Network>();
-        if (hb == null) return;
+        // make sure their object has spawned
+        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out var nc))
+            return;
+        var playerObj = nc.PlayerObject;
+        if (playerObj == null)
+            return;
 
-        var entry = new VisualElement();
-        entry.AddToClassList("player-entry");
+        // grab its Healthbar_Network
+        var hb = playerObj.GetComponent<Healthbar_Network>();
+        if (hb == null)
+            return;
 
-        var nameLabel = new Label($"ID: {id}");
+        // build the UI row
+        var container = new VisualElement();
+        container.AddToClassList("player-entry");
+
+        // name = client ID
+        var nameLabel = new Label($"ID: {clientId}");
         nameLabel.AddToClassList("player-name");
-        entry.Add(nameLabel);
+        container.Add(nameLabel);
 
-        var bar = new ProgressBar();
-        bar.lowValue = 0;
-        bar.highValue = currHP;
-        bar.value = currHP;
-        bar.AddToClassList("hp-bar");
-        entry.Add(bar);
-
-        hpList.contentContainer.Add(entry);
-        bars[id] = bar;
-
-        // 3) Subscribe to real health changes
-        NetworkVariable<float>.OnValueChangedDelegate cb = (_, newVal) =>
+        // HP bar
+        var bar = new ProgressBar
         {
-            if (bars.TryGetValue(id, out var b))
-                b.value = newVal;
+            lowValue = 0,
+            highValue = hb.MaxHealth,
+            value = hb.CurrHP.Value
+        };
+        bar.AddToClassList("hp-bar");
+        container.Add(bar);
+
+        hpList.contentContainer.Add(container);
+        bars[clientId] = bar;
+
+        // subscribe to live updates
+        NetworkVariable<float>.OnValueChangedDelegate cb = (_, newHP) =>
+        {
+            if (bars.TryGetValue(clientId, out var b))
+                b.value = newHP;
         };
         hb.CurrHP.OnValueChanged += cb;
-        callbacks[id] = cb;
+        callbacks[clientId] = cb;
     }
 
-    [ClientRpc]
-    private void RemoveEntryClientRpc(
-        NetworkObjectReference objRef,
-        ClientRpcParams rpcParams = default)
+    private void RemovePlayerEntry(ulong clientId)
     {
-        if (!objRef.TryGet(out var netObj)) return;
-        var id = netObj.OwnerClientId;
-        
-        // destroy UI
-        if (bars.TryGetValue(id, out var bar))
+        // tear down UI
+        if (bars.TryGetValue(clientId, out var bar))
         {
             bar.parent.RemoveFromHierarchy();
-            bars.Remove(id);
+            bars.Remove(clientId);
         }
 
         // unsubscribe
-        var uc = netObj.GetComponent<Healthbar_Network>();
-        if (uc != null && callbacks.TryGetValue(id, out var cb))
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out var nc))
         {
-            uc.CurrHP.OnValueChanged -= cb;
-            callbacks.Remove(id);
+            var hb = nc.PlayerObject.GetComponent<Healthbar_Network>();
+            if (hb != null && callbacks.TryGetValue(clientId, out var cb))
+            {
+                hb.CurrHP.OnValueChanged -= cb;
+                callbacks.Remove(clientId);
+            }
         }
     }
 }
