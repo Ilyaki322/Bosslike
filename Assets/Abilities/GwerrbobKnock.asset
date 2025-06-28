@@ -17,6 +17,9 @@ MonoBehaviour:
   - rid: 2044379796359348474
   AbilityIcon: {fileID: 1015121567026328760, guid: 293372669cb322343b42233f7f367947, type: 3}
   AbilityCooldown: 5
+  IsUseableByBoss: 0
+  AbilityPriority: 0
+  AbilityRange: 0
   references:
     version: 2
     RefIds:
@@ -31,9 +34,9 @@ MonoBehaviour:
           height: 5
         m_hitLayerMask:
           serializedVersion: 2
-          m_Bits: 1
+          m_Bits: 256
         m_debug: 1
     - rid: 2044379796359348474
       type: {class: KnockData, ns: , asm: Assembly-CSharp}
       data:
-        <Force>k__BackingField: 10
+        <Force>k__BackingField: 5

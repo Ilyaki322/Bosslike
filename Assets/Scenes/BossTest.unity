@@ -407,19 +407,23 @@ PrefabInstance:
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[0].prefab
       value: 
-      objectReference: {fileID: 7983661663601266262, guid: 5f4d300701e3f624d9e021f8edeb42fe, type: 3}
+      objectReference: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 5567364834663626820, guid: 7b88702178d62a845ac811b507ce202a, type: 3}
+      objectReference: {fileID: 3489673001535581259, guid: 8981a7ea3e806d74cbdab66a6e373b4c, type: 3}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[2].prefab
       value: 
-      objectReference: {fileID: 3489673001535581259, guid: 8981a7ea3e806d74cbdab66a6e373b4c, type: 3}
+      objectReference: {fileID: 3049363491594701749, guid: 1e0bbbc53f8b1ec468793423f2fc72c8, type: 3}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[3].prefab
       value: 
-      objectReference: {fileID: 3049363491594701749, guid: 1e0bbbc53f8b1ec468793423f2fc72c8, type: 3}
+      objectReference: {fileID: 8024128060886365318, guid: ec780e44cd53c4e46a3849e7150f292e, type: 3}
+    - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
+      propertyPath: m_pooledPrefabList.Array.data[4].prefab
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[0].prewarmCount
       value: 20
@@ -434,6 +438,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
       propertyPath: m_pooledPrefabList.Array.data[3].prewarmCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7314200355531788531, guid: f717dc8e846e20347ae20467403001b1, type: 3}
+      propertyPath: m_pooledPrefabList.Array.data[4].prewarmCount
       value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -33301,7 +33309,7 @@ GameObject:
   - component: {fileID: 8179031023171225016}
   - component: {fileID: 930234120681453110}
   - component: {fileID: 8179031023171225017}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33561,7 +33569,7 @@ GameObject:
   - component: {fileID: 8877230404407579926}
   - component: {fileID: 8877230404407579927}
   - component: {fileID: 8877230404407579928}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: BossTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33725,6 +33733,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   m_abilitiesData:
   - {fileID: 11400000, guid: 35a87f6e7fcb5454ea334fd1bb1db3b9, type: 2}
+  - {fileID: 11400000, guid: 35a87f6e7fcb5454ea334fd1bb1db3b9, type: 2}
+  - {fileID: 11400000, guid: 20c9442ef938c7a4aabba9cbb144cc6a, type: 2}
+  - {fileID: 11400000, guid: 1d4e729b7a682bb478b3bb5c6432194f, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
