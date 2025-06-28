@@ -17,6 +17,9 @@ MonoBehaviour:
   - rid: 2044379858495340663
   AbilityIcon: {fileID: -6995123011722499173, guid: 64277330dbf8b5a48b870f2ad772f948, type: 3}
   AbilityCooldown: 3
+  IsUseableByBoss: 0
+  AbilityPriority: 0
+  AbilityRange: 0
   references:
     version: 2
     RefIds:
@@ -31,7 +34,7 @@ MonoBehaviour:
           height: 1
         m_hitLayerMask:
           serializedVersion: 2
-          m_Bits: 1
+          m_Bits: 256
         m_debug: 1
     - rid: 2044379858495340663
       type: {class: ApplyEffectData, ns: , asm: Assembly-CSharp}

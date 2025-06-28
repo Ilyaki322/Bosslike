@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 8059837697384424065}
   - component: {fileID: 1862622474115397020}
   - component: {fileID: 3887758768013858453}
-  m_Layer: 3
+  - component: {fileID: -2063579009290008605}
+  m_Layer: 8
   m_Name: Slime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2335605134
+  GlobalObjectIdHash: 2435963176
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -252,3 +253,17 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 5.56, y: 2.74}
   m_Direction: 1
+--- !u!114 &-2063579009290008605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3049363491594701749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603dfb3ec0bc0f843ab5760d1e81351d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  m_knockTime: 0.75

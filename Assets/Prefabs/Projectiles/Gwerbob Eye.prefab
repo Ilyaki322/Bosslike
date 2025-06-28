@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.5838025, w: 0.8118957}
   m_LocalPosition: {x: -8.120826, y: -1.2684561, z: 0}
-  m_LocalScale: {x: 0.13, y: 0.13, z: 0.13}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -82,8 +82,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.9433962, g: 0.004449993, b: 0.013936378, a: 1}
+  m_Sprite: {fileID: -112968808170193824, guid: d19622aa806df414bb72164a9ea2f1f7, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  m_data: {fileID: 11400000, guid: 30310be4796253c4d900b7e26c9426e4, type: 2}
+  m_data: {fileID: 11400000, guid: 65c3c849876cbfb4d964fef209a254ab, type: 2}
   m_offset: 2
 --- !u!114 &-5049273185106463608
 MonoBehaviour:

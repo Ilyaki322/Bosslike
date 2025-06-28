@@ -819,9 +819,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   m_abilitiesData:
-  - {fileID: 11400000, guid: 5a36ef9bec953fd4b8fcb97b41ab64be, type: 2}
-  - {fileID: 11400000, guid: 0856adc2873599f49a4af85490ea9221, type: 2}
-  - {fileID: 11400000, guid: fc06c09e51e438244bedf3de424a3995, type: 2}
+  - {fileID: 11400000, guid: 1d6d6e4f4f7909244bfa5bb413ddec81, type: 2}
+  - {fileID: 11400000, guid: ca5231b47c3926c4097652d40af49fed, type: 2}
+  - {fileID: 11400000, guid: f44ae27f1edb9e84da018f404c769a0b, type: 2}
 --- !u!114 &13207417603883056
 MonoBehaviour:
   m_ObjectHideFlags: 0

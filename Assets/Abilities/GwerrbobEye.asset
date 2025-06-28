@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityDatas:
   - rid: 2044379796359348393
+  - rid: 4557402628481614093
   AbilityIcon: {fileID: 4950415919908175610, guid: c579f8f76aeb6e14194fc97eae076cd1, type: 3}
   AbilityCooldown: 5
+  IsUseableByBoss: 0
+  AbilityPriority: 0
+  AbilityRange: 0
   references:
     version: 2
     RefIds:
@@ -23,3 +27,7 @@ MonoBehaviour:
       type: {class: ProjectileData, ns: , asm: Assembly-CSharp}
       data:
         m_projectile: {fileID: 8024128060886365318, guid: ec780e44cd53c4e46a3849e7150f292e, type: 3}
+    - rid: 4557402628481614093
+      type: {class: AnimationData, ns: , asm: Assembly-CSharp}
+      data:
+        Animation: 1

@@ -35,7 +35,7 @@ public class AnimationFunction : AbilityFunction
         m_charAnimator = transform.parent.Find("Sprite").GetComponent<AnimationController>();
     }
 
-    private void onFinish()
+    public void onFinish()
     {
         m_charAnimator.setAbilityBool(false);
         m_abilityAnimator.Animator.SetBool(m_abilityHash, false);
