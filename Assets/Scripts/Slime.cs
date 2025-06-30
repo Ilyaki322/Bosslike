@@ -64,6 +64,8 @@ public class Slime : NetworkBehaviour
 
     private void attack()
     {
+        if (m_target == null) return;
+
         if (Vector3.Distance(transform.position, m_target.transform.position) < 1f)
         {
             if (m_target.TryGetComponent<Healthbar_Network>(out Healthbar_Network hb))

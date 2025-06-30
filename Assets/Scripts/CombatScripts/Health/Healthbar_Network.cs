@@ -1,10 +1,15 @@
+using System.Collections;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Slider = UnityEngine.UI.Slider;
 
 public class Healthbar_Network : NetworkBehaviour
 {
+    [SerializeField] private SpriteRenderer m_renderer1;
+    [SerializeField] private SpriteRenderer m_renderer2;
+
     [SerializeField] private Slider m_hpbar;
     [SerializeField] private GameObject m_dmgPopup;
     [SerializeField] private bool m_showDmg = false;
@@ -12,6 +17,9 @@ public class Healthbar_Network : NetworkBehaviour
     private NetworkObjectPool m_objectPool;
     private DamageLogger m_log;
     private UnitContext m_ctx;
+
+    private float m_immuneFrame = 0.1f;
+    private float m_immuneCounter = 0f;
 
     // Track only current HP here
     public NetworkVariable<float> CurrHP { get; } =
@@ -44,9 +52,27 @@ public class Healthbar_Network : NetworkBehaviour
         CurrHP.OnValueChanged += OnHealthChanged;
     }
 
+    private void Update()
+    {
+        if (m_immuneCounter > 0)
+        {
+            m_immuneCounter -= Time.deltaTime;
+        }
+
+        if (m_immuneFrame < 0) m_immuneFrame = 0;
+    }
+
     public void TakeDamage(float damage, ulong attackerID)
     {
+        if (m_immuneCounter > 0) return;
+        m_immuneCounter = m_immuneFrame;
+
         TakeDamageServerRpc(damage, attackerID);
+
+        if (m_renderer1 || m_renderer2)
+        {
+            StartCoroutine(FlashCoroutine());
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -55,6 +81,7 @@ public class Healthbar_Network : NetworkBehaviour
         CurrHP.Value = Mathf.Clamp(CurrHP.Value - damage, 0f, m_ctx.MaxHealth);
         if (m_log) m_log.RegisterDamage(attackerID, Mathf.RoundToInt(damage));
 
+        if (attackerID == 322) return;
         if (m_showDmg)
         {
             var popup = m_objectPool.GetNetworkObject(m_dmgPopup).gameObject;
@@ -68,5 +95,16 @@ public class Healthbar_Network : NetworkBehaviour
     {
         if (m_hpbar != null)
             m_hpbar.value = newVal;
+    }
+
+    private IEnumerator FlashCoroutine()
+    {
+        if (m_renderer1) m_renderer1.color = Color.red;
+        if (m_renderer2) m_renderer2.color = Color.red;
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (m_renderer1) m_renderer1.color = Color.white;
+        if (m_renderer2) m_renderer2.color = Color.white;
     }
 }

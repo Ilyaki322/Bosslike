@@ -1,0 +1,7 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="Container" style="flex-grow: 1; flex-direction: column; align-items: center; justify-content: center;">
+        <engine:Label text="Label" name="Title" style="font-size: 50px;" />
+        <engine:Button text="Play" name="Play" style="font-size: 50px;" />
+        <engine:Button text="Exit" name="Exit" style="font-size: 50px;" />
+    </engine:VisualElement>
+</engine:UXML>
