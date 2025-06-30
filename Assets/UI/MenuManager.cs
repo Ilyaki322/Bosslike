@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,6 +16,9 @@ public class MenuManager : MonoBehaviour
     private Button m_play;
     private Button m_exit;
 
+    private VisualElement m_fadeOverlay;
+    private Label m_gameOverLabel;
+
     private void Awake()
     {
         var root = m_document.rootVisualElement;
@@ -27,6 +31,12 @@ public class MenuManager : MonoBehaviour
         m_playerUI.SetActive(false);
 
         m_play.clicked += play;
+        m_exit.clicked += exit;
+
+        m_fadeOverlay = root.Q<VisualElement>("Container");
+        m_gameOverLabel = root.Q<Label>("GameOverLabel");
+
+        m_gameOverLabel.style.display = DisplayStyle.None;
     }
 
     private void play()
@@ -42,9 +52,10 @@ public class MenuManager : MonoBehaviour
 
     public void Gameover(string title, GameObject player)
     {
-        NetworkManager.Singleton.Shutdown();
-        Destroy(NetworkManager.Singleton.gameObject);
-        SceneManager.LoadScene("BossTest");
+        //NetworkManager.Singleton.Shutdown();
+        //Destroy(NetworkManager.Singleton.gameObject);
+        //SceneManager.LoadScene("BossTest");
+        StartCoroutine(GameoverSequence());
     }
 
     private void exit()
@@ -53,5 +64,35 @@ public class MenuManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
+    }
+
+    private IEnumerator GameoverSequence()
+    {
+        var root = m_document.rootVisualElement;
+        root.style.display = DisplayStyle.Flex;
+        m_play.style.display = DisplayStyle.None;
+        m_exit.style.display = DisplayStyle.None;
+        m_title.style.display = DisplayStyle.None;
+        m_fadeOverlay.style.display = DisplayStyle.Flex;
+        m_gameOverLabel.style.display = DisplayStyle.Flex;
+
+        float duration = 2f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float alpha = elapsed / duration;
+            m_fadeOverlay.style.backgroundColor = new Color(0, 0, 0, alpha);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        m_fadeOverlay.style.backgroundColor = new Color(0, 0, 0, 1);
+
+        yield return new WaitForSeconds(2f);
+
+        NetworkManager.Singleton.Shutdown();
+        Destroy(NetworkManager.Singleton.gameObject);
+        SceneManager.LoadScene("BossTest");
     }
 }

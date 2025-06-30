@@ -15,7 +15,7 @@ MonoBehaviour:
   AbilityDatas:
   - rid: 2044379796359348393
   - rid: 4557402628481614093
-  AbilityIcon: {fileID: 4950415919908175610, guid: c579f8f76aeb6e14194fc97eae076cd1, type: 3}
+  AbilityIcon: {fileID: -9189023498879117399, guid: 43702970d4d5272468623e81111a8ce5, type: 3}
   AbilityCooldown: 5
   IsUseableByBoss: 0
   AbilityPriority: 0
