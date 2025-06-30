@@ -71,7 +71,7 @@ Material:
     - _Direction: {r: 0, g: 0, b: 0, a: 0}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Vortex_Color: {r: 0.1021271, g: 0.8018868, b: 0.12757288, a: 0}
+    - _Vortex_Color: {r: 0.1982467, g: 0.34209085, b: 0.4245283, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3053732900904684865
