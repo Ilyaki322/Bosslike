@@ -922,6 +922,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  m_renderer1: {fileID: 2633147230513962721}
+  m_renderer2: {fileID: 2247575206853319990}
   m_hpbar: {fileID: 0}
   m_dmgPopup: {fileID: 0}
   m_showDmg: 0

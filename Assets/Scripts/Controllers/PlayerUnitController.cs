@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlayerUnitController : UnitController
 {
     [SerializeField] private Camera m_cam;
+    private MenuManager m_menuManager;
+    private Healthbar_Network m_hpbar;
 
     public override float GetRotationAngle()
     {
@@ -22,11 +24,14 @@ public class PlayerUnitController : UnitController
             return;
         }
 
+        m_hpbar = GetComponent<Healthbar_Network>();
+        m_menuManager = GameObject.Find("Menu").GetComponent<MenuManager>();
         PushCommand(new PlayerMovementCommand(), false);
     }
 
     private void FixedUpdate()
     {
+        if (m_hpbar.CurrHP.Value <= 0) m_menuManager.Gameover("Game Over", gameObject);
         StepCommands();
     }
 }
