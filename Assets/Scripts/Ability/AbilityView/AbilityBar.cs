@@ -47,7 +47,8 @@ public class AbilityBar : MonoBehaviour
 
         for (int i = 0; i < abilityList.Count; i++)
         {
-            var t = new AbilityBox(abilityList[i].AbilityIcon, m_frame, abilityList[i].AbilityCooldown);
+            string[] keybinds = { "M1", "M2", "E", "F", "R" };
+            var t = new AbilityBox(abilityList[i].AbilityIcon, m_frame, abilityList[i].AbilityCooldown, keybinds[i]);
             m_boxList.Add(t);
             t.AddClass("box");
             grid.Add(t);

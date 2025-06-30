@@ -8,13 +8,16 @@ public class AbilityBox : VisualElement
     private float m_totalCooldown;
     private float m_progress;
 
-    public AbilityBox(Sprite abilitySprite, Sprite frameSprite, float cooldown)
+    public AbilityBox(Sprite abilitySprite, Sprite frameSprite, float cooldown, string key)
     {
         var icon = this.CreateChild<Image>("tileIcon");
         icon.image = abilitySprite.texture;
 
         var frame = this.CreateChild("tileFrame");
         frame.style.backgroundImage = frameSprite.texture;
+
+        var keybindLabel = this.CreateChild<Label>("keybind-label");
+        keybindLabel.text = key;
 
         if (cooldown > 0)
         {
