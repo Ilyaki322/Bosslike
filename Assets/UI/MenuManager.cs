@@ -22,7 +22,6 @@ public class MenuManager : MonoBehaviour
         m_title.text = "Monster Uprising";
         m_play = root.Q<Button>("Play");
         m_exit = root.Q<Button>("Exit");
-        m_exit.style.display = DisplayStyle.None;
         m_play.text = "Start";
         m_canvas.enabled = false;
         m_playerUI.SetActive(false);
@@ -45,6 +44,14 @@ public class MenuManager : MonoBehaviour
     {
         NetworkManager.Singleton.Shutdown();
         Destroy(NetworkManager.Singleton.gameObject);
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("BossTest");
+    }
+
+    private void exit()
+    {
+        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }
